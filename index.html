@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12395c">
+<meta name="description" content="Diario personal de seguimiento neurológico con instrumentos validados, preparado para la consulta con el especialista.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%2312395c'/%3E%3Ccircle cx='256' cy='256' r='150' fill='%23bdeaf0'/%3E%3C/svg%3E">
+<title>Mi Neuroseguimiento</title>
+<style>
+:root{
+  color-scheme:light;
+  --fondo:#eef3f9; --fondo-2:#e2ebf5;
+  --superficie:#ffffff; --superficie-2:#f7fafd;
+  --texto:#152538; --secundario:#54687e;
+  --borde:#d3e0ec;
+  --sombra:0 1px 2px rgba(18,57,92,.06),0 6px 18px rgba(18,57,92,.07);
+  --sombra-alta:0 2px 6px rgba(18,57,92,.09),0 14px 32px rgba(18,57,92,.13);
+  --azul:#155c9c; --azul-oscuro:#12395c; --turquesa:#0a8b99;
+  --naranja:#b35e13; --rojo:#b02a2a; --verde:#157a4a;
+  --aviso:#fff6e0; --aviso-borde:#e0b45f; --peligro-fondo:#fff1f1;
+  --degradado:linear-gradient(135deg,#12395c 0%,#0a8b99 100%);
+  --grafica-rejilla:#dbe6f0; --grafica-eje:#9db2c6;
+}
+html[data-tema="oscuro"]{
+  color-scheme:dark;
+  --fondo:#0c141d; --fondo-2:#111c27;
+  --superficie:#16222f; --superficie-2:#1b2937;
+  --texto:#e6eef6; --secundario:#9fb3c6;
+  --borde:#2a3b4d;
+  --sombra:0 1px 2px rgba(0,0,0,.45),0 6px 18px rgba(0,0,0,.4);
+  --sombra-alta:0 2px 6px rgba(0,0,0,.5),0 14px 32px rgba(0,0,0,.55);
+  --azul:#5aa9e6; --azul-oscuro:#0b2a44; --turquesa:#3fc0cc;
+  --naranja:#e0a05a; --rojo:#e58a8a; --verde:#5cc48d;
+  --aviso:#3a2f14; --aviso-borde:#7a6428; --peligro-fondo:#3a1c1c;
+  --degradado:linear-gradient(135deg,#0b2a44 0%,#0d5f68 100%);
+  --grafica-rejilla:#243546; --grafica-eje:#3d5468;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.saltar{position:absolute;left:-9999px;top:0;background:var(--azul-oscuro);color:#fff;padding:.8rem 1rem;z-index:100}
+.saltar:focus{left:0}
+.oculto-visual{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+header{background:var(--degradado);color:#fff;padding:1rem;box-shadow:var(--sombra-alta);position:relative}
+.cabecera{max-width:1150px;margin:auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.cabecera .marca{display:flex;align-items:center;gap:1rem;flex:1 1 260px;min-width:0}
+.cabecera svg{width:62px;height:62px;flex:0 0 62px;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.cabecera h1{margin:0;font-size:1.42rem;letter-spacing:-.01em}
+.cabecera p{margin:.2rem 0 0;color:#d8e9f6;font-size:.92rem}
+.acciones-cabecera{display:flex;gap:.5rem;align-items:center}
+.boton-cabecera{min-height:44px;min-width:44px;padding:.5rem .75rem;border-radius:11px;
+  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;
+  font:inherit;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}
+.boton-cabecera:hover{background:rgba(255,255,255,.26)}
+.boton-112{background:#c62828;border-color:#e57373;text-decoration:none;font-size:1rem;letter-spacing:.03em}
+.boton-112:hover{background:#e53935}
+
+main{max-width:1150px;margin:auto;padding:1rem 1rem 2rem}
+h2{font-size:1.3rem;margin:1.4rem 0 .4rem;letter-spacing:-.01em}
+h3{font-size:1.08rem;margin:.2rem 0 .5rem}
+h4{margin:.6rem 0 .3rem;font-size:1rem}
+
+.tarjeta{background:var(--superficie);border:1px solid var(--borde);border-radius:16px;
+  padding:1.1rem;margin:1rem 0;box-shadow:var(--sombra);overflow:hidden}
+.tarjeta.destacada{border-left:5px solid var(--turquesa)}
+.tarjeta h3:first-child,.tarjeta h2:first-child{margin-top:0}
+
+.aviso{background:var(--aviso);border:1px solid var(--aviso-borde);border-radius:14px;padding:.9rem 1rem;margin:1rem 0;font-size:.95rem}
+.aviso ul{margin:.4rem 0 0;padding-left:1.2rem}
+.aviso-inline{background:var(--aviso);border-left:4px solid var(--aviso-borde);padding:.6rem .8rem;border-radius:8px;font-size:.93rem}
+.emergencia{background:var(--peligro-fondo);border:2px solid var(--rojo);border-radius:14px;padding:1rem;margin:1rem 0}
+
+.rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1rem}
+.rejilla>.tarjeta{margin:0}
+
+.panel-patologias{background:var(--superficie);border:1px solid var(--borde);border-radius:16px;
+  padding:1.1rem;margin:1rem 0;box-shadow:var(--sombra);border-top:5px solid var(--azul)}
+.panel-patologias h2{margin:0 0 .2rem;font-size:1.2rem}
+.buscador{margin:.8rem 0}
+.rejilla-patologias{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:.7rem}
+.grupo-patologias{border:1px solid var(--borde);border-radius:12px;padding:.7rem .9rem;margin:0;background:var(--superficie-2)}
+.grupo-titulo{margin:0 0 .45rem;font-weight:700;font-size:.92rem;color:var(--azul);
+  letter-spacing:.01em;padding-bottom:.35rem;border-bottom:1px solid var(--borde)}
+.opcion{display:flex;align-items:flex-start;gap:.55rem;font-weight:400;margin-top:.4rem;cursor:pointer;
+  padding:.25rem .35rem;border-radius:7px;transition:background .15s}
+.opcion:hover{background:var(--fondo-2)}
+.opcion input{width:auto;min-height:auto;margin-top:.32rem;accent-color:var(--azul);cursor:pointer}
+.resumen-patologias{margin:.9rem 0 0;font-size:.93rem;color:var(--secundario)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.chip{background:var(--fondo-2);border:1px solid var(--borde);border-radius:999px;
+  padding:.2rem .7rem;font-size:.85rem;font-weight:600;color:var(--azul)}
+
+nav{display:flex;flex-wrap:wrap;gap:.45rem;margin:1.2rem 0;padding:.5rem;
+  background:var(--superficie);border:1px solid var(--borde);border-radius:16px;box-shadow:var(--sombra)}
+nav button{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:.5rem .85rem;
+  border:1px solid transparent;border-radius:11px;background:transparent;color:var(--secundario);
+  font:inherit;font-weight:650;font-size:.92rem;cursor:pointer;transition:all .15s}
+nav button:hover{background:var(--fondo-2);color:var(--azul)}
+nav button.activo{background:var(--azul);color:#fff;box-shadow:0 3px 10px rgba(21,92,156,.3)}
+html[data-tema="oscuro"] nav button.activo{color:#0c141d}
+
+button,.boton{display:inline-flex;align-items:center;justify-content:center;min-height:46px;
+  padding:.65rem 1rem;border:1px solid var(--azul);border-radius:11px;background:var(--azul);
+  color:#fff;font:inherit;font-weight:650;text-align:center;text-decoration:none;cursor:pointer;
+  transition:transform .12s,filter .12s}
+button:hover,.boton:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button:active,.boton:active{transform:translateY(0)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,
+textarea:focus-visible,summary:focus-visible{outline:3px solid var(--naranja);outline-offset:2px}
+.secundario{background:var(--superficie);color:var(--azul)}
+.peligro{background:var(--superficie);color:var(--rojo);border-color:var(--rojo)}
+.llamar{background:var(--rojo);border-color:var(--rojo);font-size:1.05rem}
+.mini{min-height:34px;padding:.3rem .6rem;font-size:.84rem;border-radius:8px}
+.acciones{display:flex;flex-wrap:wrap;gap:.6rem;margin:.9rem 0}
+
+label{display:block;margin-top:.9rem;font-weight:650;font-size:.95rem}
+input,select,textarea{width:100%;min-height:46px;margin-top:.3rem;padding:.6rem .7rem;
+  border:1px solid var(--borde);border-radius:11px;background:var(--superficie-2);
+  color:var(--texto);font:inherit;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--azul);box-shadow:0 0 0 3px rgba(21,92,156,.14);outline:none}
+textarea{min-height:84px;resize:vertical}
+form button{margin-top:1.1rem}
+fieldset{border:0;border-left:4px solid var(--azul);border-radius:0 12px 12px 0;
+  margin:1rem 0;padding:.75rem 1rem;background:var(--superficie-2)}
+fieldset legend{font-weight:700;padding:0;font-size:.95rem;margin-bottom:.2rem}
+
+.ayuda{color:var(--secundario);font-size:.92rem}
+.estado{min-height:1.6em;font-weight:650;color:var(--verde);margin:.5rem 0}
+.estado.error{color:var(--rojo)}
+.oculto{display:none}
+.vacio{color:var(--secundario);font-style:italic;padding:.6rem 0}
+
+.tabla{overflow-x:auto;border-radius:12px}
+table{width:100%;border-collapse:collapse;margin-top:.7rem;font-size:.94rem}
+th,td{padding:.6rem .65rem;border-bottom:1px solid var(--borde);text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:var(--fondo-2);font-size:.88rem;text-transform:uppercase;letter-spacing:.03em;color:var(--secundario)}
+tbody tr:hover{background:var(--superficie-2)}
+
+.grafica{width:100%;min-height:200px;border:1px solid var(--borde);border-radius:12px;
+  background:var(--superficie-2);overflow-x:auto;padding:.3rem}
+.grafica svg{display:block;min-width:560px;width:100%;height:auto}
+
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.8rem;margin:1rem 0}
+.dato{padding:.9rem;border-radius:14px;background:var(--superficie);border:1px solid var(--borde);
+  box-shadow:var(--sombra);border-top:4px solid var(--turquesa)}
+.dato span{font-size:.85rem;color:var(--secundario);display:block}
+.dato strong{display:block;font-size:1.45rem;line-height:1.2;margin-top:.15rem}
+
+.etiqueta{display:inline-block;padding:.2rem .6rem;border-radius:999px;font-size:.76rem;font-weight:700;white-space:nowrap}
+.etiqueta-libre{background:rgba(21,122,74,.14);color:var(--verde)}
+.etiqueta-atribucion{background:rgba(21,92,156,.14);color:var(--azul)}
+.etiqueta-pendiente{background:rgba(179,94,19,.16);color:var(--naranja)}
+
+.instrumento-cabecera{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
+.instrumento-cabecera h3{margin:0}
+.resultado{background:var(--fondo-2);border-left:4px solid var(--turquesa);padding:.6rem .9rem;border-radius:9px}
+
+.pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin-top:.8rem}
+.paso{background:var(--superficie-2);border:1px solid var(--borde);border-radius:13px;padding:.9rem}
+.paso b{display:block;color:var(--azul);font-size:.85rem;letter-spacing:.04em;text-transform:uppercase}
+.paso span{display:block;margin-top:.25rem;font-size:.95rem}
+
+.informe-preview{border:1px solid var(--borde);border-radius:12px;padding:1rem;background:var(--superficie)}
+footer{max-width:1150px;margin:2rem auto;padding:0 1rem;color:var(--secundario);font-size:.88rem}
+#informeImpresion{display:none}
+
+@media(max-width:600px){
+  main{padding:.7rem}
+  .cabecera svg{width:52px;height:52px;flex-basis:52px}
+  .cabecera h1{font-size:1.2rem}
+  nav button{flex:1 1 46%;justify-content:flex-start}
+  .acciones button,.acciones a{width:100%}
+}
+
+@media print{
+  html,html[data-tema="oscuro"]{
+    --fondo:#fff;--superficie:#fff;--superficie-2:#fff;--texto:#000;--secundario:#333;
+    --borde:#999;--grafica-rejilla:#ddd;--grafica-eje:#888;--azul:#12395c;--turquesa:#0a5f68;
+  }
+  body{background:#fff}
+  header,main,footer,.saltar{display:none!important}
+  #informeImpresion{display:block!important;color:#000;font-size:9.5pt;line-height:1.35}
+  #informeImpresion h1{font-size:14pt;margin:0 0 .2rem}
+  #informeImpresion h2{font-size:11pt;margin:.7rem 0 .25rem;border-bottom:1px solid #999;padding-bottom:2px}
+  #informeImpresion p{margin:.2rem 0}
+  #informeImpresion table{width:100%;border-collapse:collapse;font-size:8.5pt}
+  #informeImpresion th,#informeImpresion td{border:1px solid #bbb;padding:3px 5px;text-align:left;vertical-align:top}
+  #informeImpresion th{background:#eee}
+  #informeImpresion tr,#informeImpresion section{break-inside:avoid}
+  .informe-cabecera{border-bottom:2px solid #333;padding-bottom:.4rem;margin-bottom:.5rem}
+  .informe-meta{font-size:8pt;color:#444}
+  .informe-bloque{margin-bottom:.6rem}
+  .informe-grafica{border:1px solid #ccc;border-radius:4px;padding:2px}
+  .informe-grafica svg{width:100%;height:auto;max-height:58mm}
+  .informe-pie{margin-top:.8rem;border-top:1px solid #999;padding-top:.4rem;font-size:7.5pt;color:#333}
+  .informe-vacio{font-style:italic;color:#555}
+  @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido principal</a>
+
+<header>
+  <div class="cabecera">
+    <div class="marca">
+      <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logotipo">
+        <defs>
+          <linearGradient id="gf" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#12395c"/><stop offset="100%" stop-color="#0a8b99"/></linearGradient>
+          <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#bdeaf0"/></linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="112" fill="url(#gf)"/>
+        <circle cx="256" cy="256" r="190" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3"/>
+        <path d="M256 112 C236 94 205 100 192 120 C165 116 143 134 141 160 C115 169 107 198 121 219 C105 241 113 270 136 279 C130 307 146 328 171 331 C180 355 202 364 224 353 C233 366 246 371 256 369 M256 112 C276 94 307 100 320 120 C347 116 369 134 371 160 C397 169 405 198 391 219 C407 241 399 270 376 279 C382 307 366 328 341 331 C332 355 310 364 288 353 C279 366 266 371 256 369" fill="url(#gc)" fill-opacity="0.96" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M256 112 L256 369" stroke="#0a8b99" stroke-width="6" stroke-linecap="round"/>
+        <path d="M176 400 L216 400 L232 372 L256 428 L280 384 L296 400 L336 400" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>Mi Neuroseguimiento</h1>
+        <p>Diario personal con instrumentos validados</p>
+      </div>
+    </div>
+    <div class="acciones-cabecera">
+      <button type="button" class="boton-cabecera" id="botonTema" aria-label="Activar modo oscuro">
+        <span id="iconoTema" aria-hidden="true">🌙</span>
+      </button>
+      <a class="boton-cabecera boton-112" href="tel:112" aria-label="Llamar al 112 en caso de emergencia">112</a>
+    </div>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <details class="aviso">
+    <summary><strong>Prototipo en fase de validación clínica</strong> — pulsa para ver las limitaciones</summary>
+    <ul>
+      <li>Utiliza solo datos ficticios mientras se revisa con profesionales.</li>
+      <li>Los datos se guardan sin cifrar en este navegador.</li>
+      <li>No hay supervisión médica, sincronización ni avisos de medicación.</li>
+      <li>La aplicación no diagnostica ni recomienda cambios de tratamiento.</li>
+    </ul>
+  </details>
+
+  <section class="panel-patologias" aria-labelledby="tituloPatologias">
+    <h2 id="tituloPatologias">¿Qué patologías quieres seguir?</h2>
+    <p class="ayuda">Marca todas las que te afecten. Puedes tener varias a la vez, algo habitual en neurología. Cada registro se etiqueta con las patologías activas en ese momento.</p>
+    <div class="buscador">
+      <label class="oculto-visual" for="buscarPatologia">Buscar patología</label>
+      <input id="buscarPatologia" type="search" placeholder="Buscar patología… (por ejemplo: migraña, párkinson, ELA)">
+    </div>
+    <div id="selectorPatologias" class="rejilla-patologias"></div>
+    <p class="resumen-patologias" id="resumenPatologias"></p>
+    <div class="chips" id="chipsPatologias"></div>
+  </section>
+
+  <nav id="navegacion" aria-label="Secciones">
+    <button type="button" data-vista="inicio"><span aria-hidden="true">🏠</span>Inicio</button>
+    <button type="button" data-vista="patologia"><span aria-hidden="true">📋</span>Mi patología</button>
+    <button type="button" data-vista="diario"><span aria-hidden="true">📝</span>Diario</button>
+    <button type="button" data-vista="mediciones"><span aria-hidden="true">📈</span>Mediciones</button>
+    <button type="button" data-vista="cuestionarios"><span aria-hidden="true">✅</span>Cuestionarios</button>
+    <button type="button" data-vista="bienestar"><span aria-hidden="true">💚</span>Bienestar</button>
+    <button type="button" data-vista="medicacion"><span aria-hidden="true">💊</span>Medicación</button>
+    <button type="button" data-vista="familia"><span aria-hidden="true">👥</span>Familia</button>
+    <button type="button" data-vista="informe"><span aria-hidden="true">📄</span>Informe</button>
+    <button type="button" data-vista="emergencia"><span aria-hidden="true">🚑</span>Emergencia</button>
+    <button type="button" data-vista="metodo"><span aria-hidden="true">🔬</span>Método</button>
+    <button type="button" data-vista="datos"><span aria-hidden="true">💾</span>Mis datos</button>
+  </nav>
+
+  <p id="mensaje" class="estado" role="status" aria-live="polite"></p>
+
+  <section id="vista-inicio" class="vista">
+    <h2>Mi evolución</h2>
+    <div id="primerosPasos"></div>
+    <div id="resumenInicio" class="resumen"></div>
+    <article class="tarjeta">
+      <h3>Intensidad registrada en el diario</h3>
+      <p class="ayuda">Cada punto es un registro con intensidad de 0 a 10. La posición horizontal representa la fecha.</p>
+      <div id="graficaDiarioInicio" class="grafica"></div>
+      <div id="tablaGraficaDiario" class="tabla"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Registros recientes</h3>
+      <div id="ultimosRegistros" class="tabla"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Estado del catálogo clínico</h3>
+      <div id="estadoValidacion"></div>
+    </article>
+  </section>
+
+  <section id="vista-patologia" class="vista oculto">
+    <h2>Mi patología</h2>
+    <div id="listaPatologias"></div>
+  </section>
+
+  <section id="vista-diario" class="vista oculto">
+    <h2>Diario de síntomas y acontecimientos</h2>
+    <p id="orientacionDiario" class="ayuda"></p>
+    <article class="tarjeta">
+      <form id="formDiario">
+        <label for="diarioFecha">Fecha</label>
+        <input id="diarioFecha" type="date" required>
+        <label for="diarioHora">Hora aproximada</label>
+        <input id="diarioHora" type="time">
+        <label for="diarioTipo">Tipo de registro</label>
+        <select id="diarioTipo">
+          <option value="Síntoma">Síntoma</option>
+          <option value="Episodio">Episodio</option>
+          <option value="Mejoría">Mejoría</option>
+          <option value="Posible efecto adverso">Posible efecto adverso</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <label for="diarioIntensidad">Intensidad percibida: 0 a 10, opcional</label>
+        <input id="diarioIntensidad" type="number" min="0" max="10" step="1">
+        <label for="diarioDescripcion">Descripción, duración y circunstancias</label>
+        <textarea id="diarioDescripcion" maxlength="500" required></textarea>
+        <button type="submit">Guardar registro</button>
+      </form>
+    </article>
+    <article class="tarjeta">
+      <h3>Evolución de la intensidad</h3>
+      <p class="ayuda">Solo se representan registros con intensidad. El tipo y la descripción se conservan en la tabla.</p>
+      <div id="graficaDiario" class="grafica"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Historial del diario</h3>
+      <div id="tablaDiario" class="tabla"></div>
+    </article>
+  </section>
+
+  <section id="vista-mediciones" class="vista oculto">
+    <h2>Mediciones y evolución</h2>
+    <p>Introduce resultados obtenidos con un dispositivo, una prueba o un análisis. La aplicación no mide directamente las variables.</p>
+    <div class="rejilla">
+      <article class="tarjeta">
+        <h3>Nueva medición</h3>
+        <form id="formMedicion">
+          <label for="medicionFecha">Fecha</label>
+          <input id="medicionFecha" type="date" required>
+          <label for="medicionHora">Hora aproximada</label>
+          <input id="medicionHora" type="time">
+          <label for="medicionTipo">Medición</label>
+          <select id="medicionTipo"></select>
+          <label id="etiquetaValor1" for="medicionValor1">Valor</label>
+          <input id="medicionValor1" type="number" min="0" step="any" required>
+          <div id="segundoValor">
+            <label for="medicionValor2">Diastólica, mmHg</label>
+            <input id="medicionValor2" type="number" min="1" step="any">
+          </div>
+          <label for="medicionContexto">Contexto, método o protocolo</label>
+          <textarea id="medicionContexto" maxlength="250" placeholder="Ej.: dispositivo, ayunas, mano utilizada o nombre de la prueba"></textarea>
+          <p id="ayudaMedicion" class="ayuda"></p>
+          <button type="submit">Guardar medición</button>
+        </form>
+      </article>
+      <article class="tarjeta">
+        <h3>Gráfica de mediciones</h3>
+        <label for="graficaTipo">Medición que deseas consultar</label>
+        <select id="graficaTipo"></select>
+        <p class="ayuda">Los puntos no se unen para evitar sugerir valores entre mediciones.</p>
+        <div id="graficaMediciones" class="grafica"></div>
+        <div id="resumenMediciones"></div>
+      </article>
+    </div>
+    <article class="tarjeta">
+      <h3>Historial de mediciones</h3>
+      <div id="tablaMediciones" class="tabla"></div>
+    </article>
+  </section>
+
+  <section id="vista-cuestionarios" class="vista oculto">
+    <h2>Cuestionarios validados</h2>
+    <p>Instrumentos con fuente publicada, versión identificada y condiciones de uso declaradas. Las puntuaciones se calculan según el método original. La aplicación no interpreta clínicamente los resultados: los describe y los cita.</p>
+    <div id="zonaCuestionario"></div>
+    <div id="listaCuestionarios"></div>
+    <article class="tarjeta">
+      <h3>Historial de cuestionarios</h3>
+      <div id="historialCuestionarios" class="tabla"></div>
+    </article>
+  </section>
+
+  <section id="vista-bienestar" class="vista oculto">
+    <h2>Bienestar emocional</h2>
+    <p>Este registro refleja tu percepción personal. No es una escala diagnóstica de depresión, ansiedad ni riesgo.</p>
+    <article class="tarjeta">
+      <form id="formBienestar">
+        <label for="bienestarFecha">Fecha</label>
+        <input id="bienestarFecha" type="date" required>
+        <label for="bienestarValor">Bienestar: 0 = muy bajo; 10 = muy bueno</label>
+        <input id="bienestarValor" type="number" min="0" max="10" step="1" required>
+        <label for="bienestarSueno">Horas de sueño aproximadas, opcional</label>
+        <input id="bienestarSueno" type="number" min="0" max="24" step="0.5">
+        <label for="bienestarNota">¿Cómo te has sentido?</label>
+        <textarea id="bienestarNota" maxlength="300"></textarea>
+        <button type="submit">Guardar bienestar</button>
+      </form>
+    </article>
+    <div class="rejilla">
+      <article class="tarjeta"><h3>Bienestar percibido</h3><div id="graficaBienestar" class="grafica"></div></article>
+      <article class="tarjeta"><h3>Horas de sueño registradas</h3><div id="graficaSueno" class="grafica"></div></article>
+    </div>
+    <article class="tarjeta">
+      <h3>Historial de bienestar</h3>
+      <div id="tablaBienestar" class="tabla"></div>
+      <p class="ayuda">Si tu bienestar empeora o te preocupa, coméntalo con un profesional o una persona de confianza. Ante peligro inmediato, contacta con emergencias.</p>
+    </article>
+  </section>
+
+  <section id="vista-medicacion" class="vista oculto">
+    <h2>Calendario de medicación y tratamiento</h2>
+    <div class="aviso">Este calendario es informativo. <strong>No genera alarmas</strong>, no comprueba interacciones y no verifica la toma. No cambies un tratamiento basándote en esta aplicación.</div>
+    <article class="tarjeta">
+      <h3>Añadir pauta diaria</h3>
+      <p class="ayuda">Admite pautas diarias simples con una hora por entrada. Para varias horas, crea varias entradas.</p>
+      <form id="formPauta">
+        <label for="pautaNombre">Medicamento o tratamiento</label>
+        <input id="pautaNombre" type="text" maxlength="100" required>
+        <label for="pautaDosis">Dosis o indicación escrita</label>
+        <input id="pautaDosis" type="text" maxlength="100" required>
+        <label for="pautaHora">Hora programada</label>
+        <input id="pautaHora" type="time" required>
+        <label for="pautaInicio">Fecha de inicio</label>
+        <input id="pautaInicio" type="date" required>
+        <label for="pautaFin">Fecha de finalización, opcional</label>
+        <input id="pautaFin" type="date">
+        <button type="submit">Guardar pauta</button>
+      </form>
+    </article>
+    <article class="tarjeta">
+      <h3>Calendario diario</h3>
+      <label for="calendarioFecha">Fecha</label>
+      <input id="calendarioFecha" type="date">
+      <p class="ayuda">«Sin confirmar» no significa «omitida». Los estados son declaraciones del usuario, no verificaciones de la toma.</p>
+      <div id="calendarioTabla" class="tabla"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Pautas guardadas</h3>
+      <div id="tablaPautas" class="tabla"></div>
+    </article>
+  </section>
+
+  <section id="vista-familia" class="vista oculto">
+    <h2>Familiares y personas cuidadoras</h2>
+    <article class="tarjeta">
+      <p>Esta sección ofrece orientación general. No hay cuentas separadas ni acceso remoto: cualquier persona con acceso al navegador puede ver los datos guardados.</p>
+      <ul>
+        <li>Pregunta qué ayuda desea la persona y respeta sus decisiones.</li>
+        <li>Colabora con los registros solo con su permiso.</li>
+        <li>Prepara con ella las preguntas para la consulta.</li>
+        <li>Solicita al equipo sanitario un plan individualizado de cuidados.</li>
+        <li>Cuida también el descanso y las necesidades de quien acompaña.</li>
+      </ul>
+    </article>
+    <article class="tarjeta">
+      <h3>Recursos informativos</h3>
+      <div id="recursoFamiliaPatologia"></div>
+      <ul>
+        <li><a href="https://medlineplus.gov/spanish/caregivers.html" target="_blank" rel="noopener noreferrer">MedlinePlus: información para cuidadores</a></li>
+        <li><a href="https://medlineplus.gov/spanish/mentalhealth.html" target="_blank" rel="noopener noreferrer">MedlinePlus: salud mental</a></li>
+        <li><a href="https://medlineplus.gov/spanish/all_healthtopics.html" target="_blank" rel="noopener noreferrer">MedlinePlus: índice de temas de salud</a></li>
+      </ul>
+      <p class="ayuda">Los enlaces necesitan conexión. Su contenido y disponibilidad pueden cambiar. No sustituyen las indicaciones individualizadas.</p>
+    </article>
+  </section>
+
+  <section id="vista-informe" class="vista oculto">
+    <h2>Informe para el especialista</h2>
+    <article class="tarjeta">
+      <p>El informe reúne los datos de las patologías activas para el período seleccionado, con gráficas de evolución, cuestionarios validados y su interpretación. Puedes imprimirlo o guardarlo como PDF.</p>
+      <label for="informeDesde">Desde</label>
+      <input id="informeDesde" type="date">
+      <label for="informeHasta">Hasta</label>
+      <input id="informeHasta" type="date">
+      <label for="informePreguntas">Preguntas para la consulta</label>
+      <textarea id="informePreguntas" maxlength="1000" placeholder="Ej.: ¿debo ajustar el tratamiento preventivo? ¿Es normal el aumento de episodios en las últimas semanas?"></textarea>
+      <div class="acciones"><button type="button" id="botonInforme">Imprimir o guardar en PDF</button></div>
+      <p class="ayuda">El PDF puede contener información sensible. La aplicación no lo envía automáticamente.</p>
+    </article>
+    <article class="tarjeta">
+      <h3>Vista previa</h3>
+      <div id="vistaPreviaInforme" class="informe-preview"></div>
+    </article>
+  </section>
+
+  <section id="vista-emergencia" class="vista oculto">
+    <h2>Emergencia y ubicación</h2>
+    <div class="emergencia">
+      <p>En España y otros países de la UE, llama al <strong>112</strong> si existe una emergencia. En otros lugares, utiliza el número local.</p>
+      <div class="acciones">
+        <a class="boton llamar" href="tel:112">Llamar al 112</a>
+        <button type="button" class="secundario" id="obtenerUbicacion">Mostrar ubicación aproximada</button>
+      </div>
+      <p id="ubicacionEstado" role="status" aria-live="polite">Ubicación no solicitada.</p>
+      <div id="ubicacionMapa"></div>
+    </div>
+    <article class="tarjeta">
+      <h3>Información importante</h3>
+      <ul>
+        <li>La ubicación se solicita solo al pulsar el botón.</li>
+        <li>El navegador pedirá permiso y puede no obtener una posición.</li>
+        <li>La posición puede ser imprecisa o desactualizada.</li>
+        <li>La aplicación no envía la ubicación al 112.</li>
+        <li>Abrir el mapa envía las coordenadas al servicio de mapas.</li>
+        <li>No retrases una llamada por intentar obtener la ubicación.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section id="vista-metodo" class="vista oculto">
+    <h2>Método y validación</h2>
+    <article class="tarjeta">
+      <p>Esta sección documenta de dónde sale cada pregunta. Es la parte que permite que un profesional evalúe la aplicación sin tener que confiar en ella.</p>
+      <p class="ayuda">Catálogo clínico v<span id="versionCatalogo"></span> · revisión <span id="fechaRevision"></span>.</p>
+    </article>
+    <article class="tarjeta">
+      <h3>Instrumentos con ítems disponibles</h3>
+      <p class="ayuda">Su licencia permite distribuir el contenido. Se cita siempre la fuente original.</p>
+      <div id="tablaInstrumentos" class="tabla"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Instrumentos con licencia pendiente</h3>
+      <p class="ayuda">Se publica la ficha completa —qué mide, ventana, número de ítems, puntuación y fuente— pero no los ítems, porque su licencia no lo permite todavía. Es una decisión deliberada.</p>
+      <div id="tablaPendientes" class="tabla"></div>
+    </article>
+    <article class="tarjeta">
+      <h3>Hoja de ruta</h3>
+      <div id="hojaRuta"></div>
+    </article>
+  </section>
+
+  <section id="vista-datos" class="vista oculto">
+    <h2>Datos de prueba</h2>
+    <article class="tarjeta">
+      <p>Los datos se guardan en este navegador y pueden perderse si se borran sus datos o se cambia de dispositivo.</p>
+      <div class="acciones">
+        <button type="button" class="secundario" id="exportarJson">Descargar copia JSON</button>
+        <button type="button" class="secundario" id="importarJson">Importar copia JSON</button>
+        <input id="archivoImportar" type="file" accept="application/json,.json" class="oculto">
+        <button type="button" class="secundario" id="cargarDemo">Cargar datos de demostración</button>
+        <button type="button" class="peligro" id="borrarTodo">Borrar datos locales</button>
+      </div>
+      <p class="ayuda">La copia JSON no está cifrada e incluye todas las patologías. La importación valida el formato y migra automáticamente los datos de la versión anterior. El borrado no elimina archivos PDF o JSON ya descargados.</p>
+    </article>
+    <article class="tarjeta">
+      <h3>Estado de la aplicación</h3>
+      <p id="estadoConexion"></p>
+      <p id="estadoPwa"></p>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p><strong>Autoría:</strong> Miguel Ángel Layunta López.</p>
+  <p>Prototipo de seguimiento personal en fase de validación clínica. Sin marcado sanitario, sin supervisión profesional y sin avisos automáticos.</p>
+</footer>
+
+<section id="informeImpresion" aria-label="Informe imprimible"></section>
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   1. CATÁLOGO CLÍNICO
+   ========================================================================== */
+
+const VERSION_CATALOGO = "2.1.0";
+const FECHA_REVISION = "2026-11";
+
+const GRUPOS = {
+  cefaleas:{nombre:"Cefaleas",icono:"🌩️"},
+  movimiento:{nombre:"Trastornos del movimiento",icono:"🤲"},
+  epilepsia:{nombre:"Epilepsias y crisis",icono:"⚡"},
+  desmielinizantes:{nombre:"Enfermedades desmielinizantes",icono:"🧬"},
+  vascular:{nombre:"Enfermedad vascular cerebral",icono:"🩸"},
+  cognitivas:{nombre:"Deterioro cognitivo y demencias",icono:"🧠"},
+  neuromuscular:{nombre:"Enfermedades neuromusculares",icono:"💪"},
+  dolor:{nombre:"Dolor neuropático y neuralgias",icono:"🔥"},
+  sueno:{nombre:"Sueño y vigilia",icono:"🌙"},
+  otras:{nombre:"Otras enfermedades neurológicas",icono:"➕"}
+};
+
+const PATOLOGIAS = {
+  migrana:{nombre:"Migraña",grupo:"cefaleas",
+    descripcion:"Cefalea primaria recurrente, habitualmente pulsátil y con síntomas asociados como náuseas o sensibilidad a la luz y al sonido.",
+    orientacion:"Registra duración, localización, síntomas asociados, posibles desencadenantes y uso de medicación de rescate.",
+    filas:[["Dolor","Intensidad, duración y localización."],["Síntomas asociados","Náuseas, fotofobia, sonofobia, aura."],["Desencadenantes","Circunstancias observadas; no prueban causalidad."],["Tratamiento agudo","Nombre, dosis y momento de uso."]],
+    instrumentos:["midas","hit6","eq5d5l"],enlace:"https://medlineplus.gov/spanish/migraine.html",
+    consultar:["Cefalea de inicio súbito e intensidad máxima en segundos.","Fiebre, rigidez de cuello o alteración del nivel de conciencia.","Déficit neurológico nuevo o progresivo."]},
+
+  cefalea_tensional:{nombre:"Cefalea tensional",grupo:"cefaleas",
+    descripcion:"Cefalea primaria habitualmente bilateral, opresiva y de intensidad leve o moderada.",
+    orientacion:"Anota frecuencia mensual, duración, localización y relación con estrés, sueño o postura.",
+    filas:[["Frecuencia","Días con cefalea al mes."],["Carácter","Opresivo, bilateral, no pulsátil."],["Medicación","Frecuencia de uso de analgésicos."],["Contexto","Estrés, sueño, tensión cervical."]],
+    instrumentos:["hit6","midas"],enlace:"https://medlineplus.gov/spanish/headache.html",
+    consultar:["Cambio en el patrón habitual de las cefaleas.","Cefalea que despierta por la noche o al levantarse.","Uso de analgésicos más de 10 días al mes."]},
+
+  cefalea_autonomica:{nombre:"Cefalea trigémino-autonómica (racimos)",grupo:"cefaleas",
+    descripcion:"Grupo de cefaleas primarias con dolor unilateral intenso y síntomas autonómicos craneales acompañantes.",
+    orientacion:"Registra hora exacta de inicio, duración, lado y síntomas oculares o nasales acompañantes.",
+    filas:[["Duración","Minutos por episodio y número al día."],["Lateralidad","Siempre el mismo lado o alternante."],["Síntomas autonómicos","Lagrimeo, congestión nasal, ptosis."],["Periodicidad","Racimos, remisiones y hora de inicio."]],
+    instrumentos:["hit6","eq5d5l"],enlace:"https://medlineplus.gov/spanish/headache.html",
+    consultar:["Primer episodio de dolor orbitario intensísimo.","Síntomas oculares con pérdida de visión.","Dolor con fiebre o signos meníngeos."]},
+
+  parkinson:{nombre:"Enfermedad de Parkinson",grupo:"movimiento",
+    descripcion:"Trastorno neurodegenerativo con síntomas motores y no motores, habitualmente con respuesta a levodopa.",
+    orientacion:"Describe movilidad, temblor, caídas y períodos ON/OFF percibidos, junto con su hora aproximada.",
+    filas:[["Movilidad","Dificultades al caminar o en actividades habituales."],["Temblor y rigidez","Cuándo aparecen y cómo afectan al día a día."],["Fluctuaciones","Períodos ON/OFF y relación temporal con las tomas."],["Síntomas no motores","Sueño, ánimo, estreñimiento, dolor."]],
+    instrumentos:["pdq8","woq9","pdds","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/parkinsonsdisease.html",
+    consultar:["Caídas repetidas o pérdida de conciencia.","Confusión o alucinaciones de inicio reciente.","Empeoramiento brusco de la movilidad en horas o días."]},
+
+  temblor_esencial:{nombre:"Temblor esencial",grupo:"movimiento",
+    descripcion:"Temblor de acción bilateral, habitualmente en manos, sin otros signos parkinsonianos.",
+    orientacion:"Anota qué actividades se ven afectadas (comer, escribir, beber) y en qué situaciones empeora.",
+    filas:[["Actividades afectadas","Escritura, alimentación, bebida, higiene."],["Factores moduladores","Estrés, cafeína, cansancio, alcohol."],["Progresión","Cambios percibidos en meses."],["Impacto","Limitación en la vida diaria."]],
+    instrumentos:["tetras_adl","eq5d5l"],enlace:"https://medlineplus.gov/spanish/tremor.html",
+    consultar:["Temblor de inicio brusco o muy asimétrico.","Temblor en reposo acompañado de lentitud.","Dificultad nueva para caminar o hablar."]},
+
+  distonia:{nombre:"Distonía",grupo:"movimiento",
+    descripcion:"Trastorno del movimiento caracterizado por contracciones musculares sostenidas que producen posturas anómalas.",
+    orientacion:"Describe qué parte del cuerpo se afecta, en qué posturas o tareas aparece y si hay maniobras que la alivian.",
+    filas:[["Localización","Cuello, párpados, mano, tronco, voz."],["Desencadenantes","Tarea específica, postura, estrés."],["Maniobras de alivio","Gesto antagonista, tacto, reposo."],["Dolor","Presencia e intensidad asociada."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/dystonia.html",
+    consultar:["Distonía de inicio súbito tras un fármaco.","Dificultad para respirar o tragar.","Progresión rápida en semanas."]},
+
+  huntington:{nombre:"Enfermedad de Huntington",grupo:"movimiento",
+    descripcion:"Enfermedad neurodegenerativa hereditaria con trastorno del movimiento, deterioro cognitivo y alteraciones conductuales.",
+    orientacion:"Registra movilidad, movimientos involuntarios, cambios de ánimo y seguridad en el domicilio.",
+    filas:[["Movimientos involuntarios","Frecuencia e interferencia."],["Marcha y equilibrio","Caídas y circunstancias."],["Cognición","Olvidos, desorientación, planificación."],["Conducta y ánimo","Irritabilidad, apatía, impulsividad."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/huntingtonsdisease.html",
+    consultar:["Caídas con traumatismo craneal.","Ideas de daño a uno mismo o a otros.","Dificultad nueva para tragar."]},
+
+  tourette:{nombre:"Síndrome de Tourette",grupo:"movimiento",
+    descripcion:"Trastorno del neurodesarrollo con tics motores y vocales múltiples de más de un año de evolución.",
+    orientacion:"Anota tipos de tics, frecuencia, situaciones que los aumentan y su impacto social o escolar.",
+    filas:[["Tics motores","Tipo, frecuencia, zonas."],["Tics vocales","Tipo y contexto."],["Desencadenantes","Estrés, cansancio, excitación."],["Impacto","Escuela, trabajo, relaciones."]],
+    instrumentos:["eq5d5l","gad7"],enlace:"https://medlineplus.gov/spanish/tourettesyndrome.html",
+    consultar:["Tics con lesión autoinfligida.","Coprolalia o conductas de riesgo.","Deterioro funcional marcado y rápido."]},
+
+  piernas_inquietas:{nombre:"Síndrome de piernas inquietas",grupo:"movimiento",
+    descripcion:"Necesidad irresistible de mover las piernas, con molestias que empeoran en reposo y por la tarde-noche.",
+    orientacion:"Registra hora de inicio, tiempo hasta el alivio al moverse e interferencia con el sueño.",
+    filas:[["Horario","Hora de inicio y duración."],["Alivio","Movimiento o deambulación."],["Sueño","Latencia y despertares."],["Factores","Hierro, embarazo, fármacos, cafeína."]],
+    instrumentos:["irls","epworth"],enlace:"https://medlineplus.gov/spanish/restlesslegs.html",
+    consultar:["Somnolencia diurna con riesgo de accidentes.","Empeoramiento brusco tras un fármaco.","Síntomas en brazos o tronco de inicio reciente."]},
+
+  epilepsia:{nombre:"Epilepsia",grupo:"epilepsia",
+    descripcion:"Trastorno cerebral caracterizado por una predisposición duradera a generar crisis epilépticas.",
+    orientacion:"Anota la duración estimada, qué ocurrió antes y durante el episodio, y quién lo presenció.",
+    filas:[["Episodio","Fecha, hora aproximada y descripción de lo observado."],["Duración","Tiempo estimado e incertidumbre."],["Recuperación","Estado posterior y duración."],["Contexto","Sueño, medicación, fiebre, alcohol."]],
+    instrumentos:["nddie","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/epilepsy.html",
+    consultar:["Crisis de más de 5 minutos o repetidas sin recuperación.","Dificultad para respirar o lesión durante la crisis.","Primera crisis de la vida."]},
+
+  esclerosis_multiple:{nombre:"Esclerosis múltiple",grupo:"desmielinizantes",
+    descripcion:"Enfermedad inflamatoria desmielinizante del sistema nervioso central, con brotes y progresión variable.",
+    orientacion:"Puedes registrar fatiga, movilidad, síntomas nuevos o cambios percibidos y su duración.",
+    filas:[["Fatiga","Intensidad percibida e impacto en actividades."],["Movilidad","Cambios al caminar, equilibrio o ayudas."],["Otros síntomas","Visuales, sensitivos, esfínteres."],["Contexto","Calor, infección, descanso, estrés."]],
+    instrumentos:["msis29","pdds","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/multiplesclerosis.html",
+    consultar:["Síntoma nuevo de instauración rápida (posible brote).","Pérdida visual brusca.","Fiebre con empeoramiento marcado de síntomas."]},
+
+  nmo:{nombre:"Neuromielitis óptica (NMOSD)",grupo:"desmielinizantes",
+    descripcion:"Enfermedad autoinmune con neuritis óptica y mielitis longitudinalmente extensa, mediada por anticuerpos anti-AQP4.",
+    orientacion:"Registra visión, fuerza en extremidades, sensibilidad y control de esfínteres.",
+    filas:[["Visión","Dolor ocular, pérdida visual, colores."],["Fuerza","Debilidad en brazos o piernas."],["Sensibilidad","Nivel sensitivo, hormigueos."],["Esfínteres","Retención, incontinencia."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/neuromyelitisoptica.html",
+    consultar:["Pérdida visual nueva o dolorosa.","Debilidad o pérdida de sensibilidad de instauración rápida.","Retención urinaria aguda."]},
+
+  mogad:{nombre:"MOGAD",grupo:"desmielinizantes",
+    descripcion:"Enfermedad desmielinizante asociada a anticuerpos anti-MOG, con neuritis óptica, mielitis o encefalitis.",
+    orientacion:"Anota síntomas visuales, sensitivos y motores, y su relación temporal con infecciones.",
+    filas:[["Visión","Edema papilar, dolor, pérdida visual."],["Médula","Debilidad, sensibilidad, esfínteres."],["Contexto","Infección o vacunación previas."],["Recuperación","Evolución tras el episodio."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/neurologicdiseases.html",
+    consultar:["Pérdida visual nueva.","Debilidad de instauración rápida.","Convulsión o alteración de conciencia."]},
+
+  ictus:{nombre:"Ictus y recuperación",grupo:"vascular",
+    descripcion:"Déficit neurológico focal de origen vascular, isquémico o hemorrágico, y su proceso de recuperación.",
+    orientacion:"Puedes anotar movilidad, rehabilitación, comunicación y dificultades en actividades diarias.",
+    filas:[["Movilidad","Desplazamientos, ayudas y cambios percibidos."],["Actividades diarias","Vestirse, comer, aseo."],["Comunicación","Dificultades o cambios observados."],["Rehabilitación","Sesiones, ejercicios y dudas."]],
+    instrumentos:["rankin","barthel","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/stroke.html",
+    consultar:["Déficit neurológico nuevo o recurrente.","Dificultad súbita para hablar o comprender.","Dolor torácico, palpitaciones o pérdida de conciencia."]},
+
+  ait:{nombre:"Accidente isquémico transitorio (AIT)",grupo:"vascular",
+    descripcion:"Episodio transitorio de déficit neurológico focal de origen isquémico, sin infarto demostrable.",
+    orientacion:"Registra el episodio, su duración y los factores de riesgo cardiovascular.",
+    filas:[["Episodio","Síntomas, duración y recuperación."],["Factores de riesgo","Tensión, glucemia, tabaco, colesterol."],["Tratamiento","Antiagregación o anticoagulación."],["Seguimiento","Pruebas pendientes y citas."]],
+    instrumentos:["rankin","eq5d5l"],enlace:"https://medlineplus.gov/spanish/stroke.html",
+    consultar:["Repetición de síntomas focales transitorios.","Cefalea intensa con déficit.","Déficit que no se resuelve."]},
+
+  alzheimer:{nombre:"Enfermedad de Alzheimer",grupo:"cognitivas",
+    descripcion:"Demencia neurodegenerativa progresiva con deterioro de memoria y otras funciones cognitivas.",
+    orientacion:"Anota olvidos, orientación, actividades diarias y cambios de conducta, preferiblemente con un informante.",
+    filas:[["Memoria","Olvidos y su impacto."],["Orientación","Tiempo, lugar, personas."],["Actividades diarias","Qué necesita ayuda."],["Conducta","Apatía, agitación, sueño."]],
+    instrumentos:["ad8","eq5d5l"],enlace:"https://medlineplus.gov/spanish/alzheimersdisease.html",
+    consultar:["Desorientación con riesgo de salida del domicilio.","Agitación con riesgo para sí mismo o para otros.","Dificultad nueva para tragar o fiebre."]},
+
+  demencia_frontotemporal:{nombre:"Demencia frontotemporal",grupo:"cognitivas",
+    descripcion:"Demencia con predominio de cambios de conducta, personalidad o lenguaje, con memoria relativamente preservada al inicio.",
+    orientacion:"Registra cambios de conducta, desinhibición, apatía y dificultades del lenguaje.",
+    filas:[["Conducta","Desinhibición, impulsividad, apatía."],["Lenguaje","Dificultad para encontrar palabras, comprensión."],["Alimentación","Cambios de apetito o preferencias."],["Seguridad","Conducción, dinero, salidas."]],
+    instrumentos:["ad8","eq5d5l"],enlace:"https://medlineplus.gov/spanish/dementias.html",
+    consultar:["Conductas de riesgo (gasto, conducción, salidas).","Agresividad o agitación marcada.","Dificultad para tragar."]},
+
+  demencia_cuerpos_lewy:{nombre:"Demencia con cuerpos de Lewy",grupo:"cognitivas",
+    descripcion:"Demencia con fluctuación cognitiva, alucinaciones visuales y parkinsonismo, con sensibilidad a neurolépticos.",
+    orientacion:"Anota fluctuaciones, alucinaciones, sueño REM alterado y síntomas parkinsonianos.",
+    filas:[["Fluctuación","Variación de la atención en el día."],["Alucinaciones","Visuales, detalladas, reconocidas o no."],["Sueño","Sueños vívidos, movimientos durante el sueño."],["Parkinsonismo","Rigidez, lentitud, caídas."]],
+    instrumentos:["ad8","eq5d5l"],enlace:"https://medlineplus.gov/spanish/lewybodydementia.html",
+    consultar:["Alucinaciones que generan miedo o riesgo.","Caídas repetidas.","Somnolencia diurna extrema."]},
+
+  deterioro_cognitivo_leve:{nombre:"Deterioro cognitivo leve",grupo:"cognitivas",
+    descripcion:"Déficit cognitivo objetivable que no interfiere de forma significativa con la autonomía.",
+    orientacion:"Registra qué funciones se ven afectadas y si hay cambios en la autonomía.",
+    filas:[["Dominio afectado","Memoria, atención, lenguaje, ejecutivo."],["Autonomía","Cambios en actividades instrumentales."],["Ánimo","Síntomas depresivos o ansiedad."],["Evolución","Comparación con meses previos."]],
+    instrumentos:["ad8","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/mildcognitiveimpairment.html",
+    consultar:["Pérdida de autonomía para actividades básicas.","Desorientación en lugares conocidos.","Cambio brusco del estado cognitivo."]},
+
+  ela:{nombre:"Esclerosis lateral amiotrófica (ELA)",grupo:"neuromuscular",
+    descripcion:"Enfermedad de la motoneurona con debilidad progresiva, afectación bulbar y respiratoria.",
+    orientacion:"Registra función por regiones (bulbar, brazos, piernas, respiratoria) y cambios en semanas.",
+    filas:[["Bulbar","Habla, salivación, deglución."],["Miembros","Escritura, vestido, marcha, escaleras."],["Respiratorio","Disnea, ortopnea, cefalea matutina."],["Peso y nutrición","Evolución ponderal."]],
+    instrumentos:["alsfrsr","eq5d5l"],enlace:"https://medlineplus.gov/spanish/als.html",
+    consultar:["Dificultad para respirar en reposo o al hablar.","Atragantamiento con la comida.","Caída con traumatismo."]},
+
+  miastenia:{nombre:"Miastenia gravis",grupo:"neuromuscular",
+    descripcion:"Trastorno de la unión neuromuscular con fatigabilidad muscular fluctuante.",
+    orientacion:"Anota fatigabilidad por grupos musculares y su variación a lo largo del día.",
+    filas:[["Ocular","Diplopía, ptosis, variación diurna."],["Bulbar","Masticación, deglución, voz."],["Generalizada","Debilidad en brazos, piernas, cuello."],["Respiratorio","Disnea, debilidad al toser."]],
+    instrumentos:["mgadl","eq5d5l"],enlace:"https://medlineplus.gov/spanish/myastheniagravis.html",
+    consultar:["Dificultad para respirar o para tragar.","Debilidad que empeora rápidamente en horas.","Infección con empeoramiento de la debilidad."]},
+
+  neuropatia_periferica:{nombre:"Neuropatía periférica",grupo:"neuromuscular",
+    descripcion:"Afectación de nervios periféricos con síntomas sensitivos, motores o autonómicos de distribución distal.",
+    orientacion:"Describe la distribución, el carácter del dolor y la presencia de calambres o pérdida de sensibilidad.",
+    filas:[["Distribución","Manos, pies, longitud de afectación."],["Carácter","Quemazón, calambres, adormecimiento."],["Equilibrio","Inestabilidad, caídas."],["Contexto","Diabetes, alcohol, quimioterapia."]],
+    instrumentos:["dn4","eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/peripheralnervedisorders.html",
+    consultar:["Debilidad de instauración rápida.","Úlceras en los pies sin dolor.","Pérdida de control de esfínteres."]},
+
+  ame:{nombre:"Atrofia muscular espinal (AME)",grupo:"neuromuscular",
+    descripcion:"Enfermedad genética de la motoneurona con debilidad proximal progresiva.",
+    orientacion:"Registra función motora por hitos, autonomía y síntomas respiratorios.",
+    filas:[["Función motora","Sedestación, marcha, transferencias."],["Brazos","Alcance, escritura, uso de silla."],["Respiratorio","Tos, secreciones, soporte."],["Autonomía","Ayudas técnicas y cambios."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/spinalmuscularatrophy.html",
+    consultar:["Aumento de secreciones con dificultad respiratoria.","Pérdida de función motora en semanas.","Fiebre con empeoramiento respiratorio."]},
+
+  neuralgia_trigemino:{nombre:"Neuralgia del trigémino",grupo:"dolor",
+    descripcion:"Dolor paroxístico, lancinante y eléctrico en el territorio del nervio trigémino.",
+    orientacion:"Anota la rama afectada, la duración de los paroxismos y los desencadenantes mecánicos.",
+    filas:[["Localización","Rama V1, V2 o V3."],["Duración","Segundos o minutos por paroxismo."],["Desencadenantes","Masticar, hablar, tacto, frío."],["Tratamiento","Respuesta y efectos percibidos."]],
+    instrumentos:["dn4","eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/trigeminalneuralgia.html",
+    consultar:["Déficit sensitivo en la cara.","Dolor bilateral o de inicio en personas jóvenes.","Pérdida de audición o síntomas neurológicos asociados."]},
+
+  dolor_neuropatico:{nombre:"Dolor neuropático",grupo:"dolor",
+    descripcion:"Dolor causado por lesión o enfermedad del sistema somatosensorial.",
+    orientacion:"Describe el carácter del dolor, su distribución y la respuesta a tratamientos previos.",
+    filas:[["Carácter","Quemazón, descarga, pinchazos."],["Distribución","Zona y extensión."],["Sensaciones","Hormigueo, adormecimiento, alodinia."],["Impacto","Sueño, ánimo, actividad."]],
+    instrumentos:["dn4","phq9","eq5d5l"],enlace:"https://medlineplus.gov/spanish/pain.html",
+    consultar:["Dolor nuevo con pérdida de fuerza.","Dolor con fiebre o pérdida de peso.","Dolor que impide el descanso de forma mantenida."]},
+
+  narcolepsia:{nombre:"Narcolepsia",grupo:"sueno",
+    descripcion:"Trastorno de la regulación del sueño con somnolencia diurna excesiva y cataplejía en muchos casos.",
+    orientacion:"Registra somnolencia diurna, siestas, cataplejía y parálisis del sueño.",
+    filas:[["Somnolencia","Situaciones en las que aparece."],["Siestas","Número, duración y efecto."],["Cataplejía","Desencadenantes y duración."],["Sueño nocturno","Fragmentación y sueños vívidos."]],
+    instrumentos:["epworth","eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/narcolepsy.html",
+    consultar:["Somnolencia con riesgo de accidentes.","Episodios de pérdida de tono con caída.","Alucinaciones al dormirse o al despertar."]},
+
+  apnea_sueno:{nombre:"Apnea obstructiva del sueño",grupo:"sueno",
+    descripcion:"Trastorno respiratorio del sueño con pausas respiratorias repetidas y fragmentación del descanso.",
+    orientacion:"Anota ronquido, pausas observadas, somnolencia diurna y horas de sueño.",
+    filas:[["Ronquido","Intensidad y frecuencia."],["Pausas","Observadas por otra persona."],["Somnolencia","Situaciones de riesgo."],["Tratamiento","CPAP, horas de uso, mascarilla."]],
+    instrumentos:["epworth","eq5d5l"],enlace:"https://medlineplus.gov/spanish/sleepapnea.html",
+    consultar:["Somnolencia al conducir.","Cefalea matutina intensa y persistente.","Arritmias o hipertensión de difícil control."]},
+
+  tumor_cerebral:{nombre:"Tumor cerebral",grupo:"otras",
+    descripcion:"Lesión expansiva intracraneal, primaria o metastásica, con síntomas focales o de hipertensión intracraneal.",
+    orientacion:"Registra cefalea, crisis, déficit focal y efectos del tratamiento oncológico.",
+    filas:[["Cefalea","Patrón, horario, respuesta a analgesia."],["Crisis","Tipo y frecuencia."],["Déficit focal","Fuerza, lenguaje, visión."],["Tratamiento","Corticoides, antiepilépticos, efectos."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/braintumors.html",
+    consultar:["Cefalea con vómitos y empeoramiento matutino.","Crisis epiléptica nueva.","Déficit neurológico progresivo."]},
+
+  tce:{nombre:"Traumatismo craneoencefálico",grupo:"otras",
+    descripcion:"Lesión cerebral adquirida por impacto, con secuelas cognitivas, conductuales y físicas variables.",
+    orientacion:"Anota cefalea, sueño, ánimo, atención y tolerancia al esfuerzo.",
+    filas:[["Cefalea","Frecuencia e intensidad."],["Cognición","Atención, memoria, lentitud."],["Ánimo","Irritabilidad, labilidad, apatía."],["Tolerancia","Fatiga ante esfuerzo físico o cognitivo."]],
+    instrumentos:["phq9","gad7","eq5d5l"],enlace:"https://medlineplus.gov/spanish/traumaticbraininjury.html",
+    consultar:["Pérdida de conciencia o convulsión.","Vómitos repetidos o cefalea creciente.","Alteración del comportamiento de inicio brusco."]},
+
+  vertigo:{nombre:"Vértigo y trastornos vestibulares",grupo:"otras",
+    descripcion:"Sensación de movimiento rotatorio o inestabilidad por disfunción del sistema vestibular.",
+    orientacion:"Describe el tipo de vértigo, su duración, los desencadenantes y los síntomas acompañantes.",
+    filas:[["Tipo","Rotatorio, inestabilidad, mareo."],["Duración","Segundos, minutos, horas, días."],["Desencadenantes","Cambios de postura, giros, ruido."],["Acompañantes","Náuseas, acúfenos, hipoacusia."]],
+    instrumentos:["eq5d5l","gad7"],enlace:"https://medlineplus.gov/spanish/dizzinessandvertigo.html",
+    consultar:["Vértigo con déficit neurológico o cefalea intensa.","Pérdida auditiva brusca.","Incapacidad para mantener la bipedestación."]},
+
+  ataxia:{nombre:"Ataxias",grupo:"otras",
+    descripcion:"Trastornos de la coordinación por afectación cerebelosa, sensitiva o vestibular.",
+    orientacion:"Anota la marcha, la coordinación fina, el habla y la progresión.",
+    filas:[["Marcha","Inestabilidad, ayudas, caídas."],["Coordinación","Escritura, botones, cubiertos."],["Habla","Disartria, inteligibilidad."],["Progresión","Cambios en meses."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/ataxia.html",
+    consultar:["Ataxia de inicio agudo.","Caídas repetidas con traumatismo.","Dificultad nueva para tragar."]},
+
+  paralisis_facial:{nombre:"Parálisis facial",grupo:"otras",
+    descripcion:"Debilidad de la musculatura facial, habitualmente por afectación del nervio facial.",
+    orientacion:"Registra el grado de cierre ocular, la simetría y la evolución semana a semana.",
+    filas:[["Ojo","Cierre incompleto, lagrimeo, sequedad."],["Boca","Desviación, dificultad para beber."],["Sabor y audición","Alteraciones asociadas."],["Evolución","Cambios semanales."]],
+    instrumentos:["eq5d5l","phq9"],enlace:"https://medlineplus.gov/spanish/facialparalysis.html",
+    consultar:["Parálisis facial con debilidad en brazo o pierna.","Dificultad para hablar o tragar.","Lesiones cutáneas o vesículas en el oído."]},
+
+  otra:{nombre:"Otra enfermedad neurológica",grupo:"otras",
+    descripcion:"Registro abierto para enfermedades neurológicas no listadas.",
+    orientacion:"Describe los cambios que tú y tu equipo sanitario consideréis importantes.",
+    filas:[["Síntomas","Descripción, duración e intensidad."],["Función","Cambios en movilidad y actividades diarias."],["Tratamiento","Pautas y efectos percibidos."],["Bienestar","Sueño, ánimo y necesidades de apoyo."]],
+    instrumentos:["eq5d5l","phq9","gad7"],enlace:"https://medlineplus.gov/spanish/neurologicdiseases.html",
+    consultar:["Déficit neurológico nuevo.","Pérdida de conciencia.","Dolor torácico o dificultad respiratoria."]}
+};
+
+const OPC_FREC4 = [
+  {texto:"Nunca",valor:0},{texto:"Varios días",valor:1},
+  {texto:"Más de la mitad de los días",valor:2},{texto:"Casi todos los días",valor:3}
+];
+const OPC_NDDIE = [
+  {texto:"Nunca",valor:1},{texto:"Casi nunca",valor:2},
+  {texto:"A veces",valor:3},{texto:"Siempre o casi siempre",valor:4}
+];
+const OPC_SI_NO = [{texto:"No",valor:0},{texto:"Sí",valor:1}];
+const OPC_EPW = [
+  {texto:"0 · Nunca",valor:0},{texto:"1 · Poca probabilidad",valor:1},
+  {texto:"2 · Probabilidad moderada",valor:2},{texto:"3 · Alta probabilidad",valor:3}
+];
+const OPC_WOQ = [
+  {texto:"No lo he notado",valor:0},
+  {texto:"Sí, pero no mejora con la siguiente toma",valor:0},
+  {texto:"Sí, y mejora con la siguiente toma",valor:1}
+];
+const OPC_IRLS_INT = [
+  {texto:"0 · Nada",valor:0},{texto:"1 · Leve",valor:1},{texto:"2 · Moderado",valor:2},
+  {texto:"3 · Intenso",valor:3},{texto:"4 · Muy intenso",valor:4}
+];
+const OPC_IRLS_FRE = [
+  {texto:"0 · Nunca",valor:0},{texto:"1 · Rara vez",valor:1},{texto:"2 · A veces",valor:2},
+  {texto:"3 · A menudo",valor:3},{texto:"4 · Muy a menudo",valor:4}
+];
+const OPC_IRLS_GRA = [
+  {texto:"0 · Nada",valor:0},{texto:"1 · Leve",valor:1},{texto:"2 · Moderado",valor:2},
+  {texto:"3 · Grave",valor:3},{texto:"4 · Muy grave",valor:4}
+];
+const OPC_TETRAS = [
+  {texto:"0 · Normal",valor:0},{texto:"1 · Leve",valor:1},{texto:"2 · Moderado",valor:2},
+  {texto:"3 · Marcado",valor:3},{texto:"4 · Grave",valor:4}
+];
+
+const desc4 = (arr) => arr.map((t,i) => ({texto:t,valor:4-i}));
+const asc3 = (arr) => arr.map((t,i) => ({texto:t,valor:i}));
+const opcItems = (arr, opciones) => arr.map(([id,texto],i) => ({
+  id: id || ("q"+(i+1)), texto, tipo:"opciones", opciones
+}));
+
+const INSTRUMENTOS = {
+
+  midas:{id:"midas",nombre:"MIDAS",nombreCompleto:"Migraine Disability Assessment",
+    queMide:"Días de discapacidad por migraña en los últimos 3 meses.",
+    ventana:"Últimos 3 meses",nItems:5,patologias:["migrana","cefalea_tensional"],
+    licencia:{estado:"atribucion",texto:"© Stewart WF et al. Uso no comercial con atribución."},
+    cita:"Stewart WF, Lipton RB, Dowson AJ, Sawyer J. Development and testing of the Migraine Disability Assessment (MIDAS) Questionnaire. Neurology. 2001;56(6 Suppl 1):S20-8.",
+    puntuacion:"Suma de los 5 ítems (días). Grado I: 0-5 · Grado II: 6-10 · Grado III: 11-20 · Grado IV: ≥21.",
+    items:[["m1","Días de baja o sin poder acudir al trabajo o a los estudios"],
+      ["m2","Días en el trabajo o estudios con productividad reducida a la mitad o menos"],
+      ["m3","Días sin poder realizar las tareas del hogar"],
+      ["m4","Días con productividad reducida a la mitad o menos en las tareas del hogar"],
+      ["m5","Días sin poder participar en actividades familiares, sociales o de ocio"],
+      ["mA","Días con dolor de cabeza en los últimos 3 meses (informativo)",true],
+      ["mB","Intensidad media del dolor, 0 a 10 (informativo)",true]].map(([id,texto,info]) =>
+        ({id,texto,tipo:"numero",min:0,max:id==="mB"?10:90,informativo:!!info})),
+    calcular(r){const t=["m1","m2","m3","m4","m5"].reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=5?"Grado I · discapacidad mínima o nula":t<=10?"Grado II · discapacidad leve":
+        t<=20?"Grado III · discapacidad moderada":"Grado IV · discapacidad grave";
+      return {total:t,unidad:"días",nivel,interpretacion:"Suma de los 5 ítems. No incluye los ítems informativos A y B."};}},
+
+  hit6:{id:"hit6",nombre:"HIT-6",nombreCompleto:"Headache Impact Test",
+    queMide:"Impacto de la cefalea en la vida diaria durante las últimas 4 semanas.",
+    ventana:"Últimas 4 semanas",nItems:6,patologias:["migrana","cefalea_tensional","cefalea_autonomica"],
+    licencia:{estado:"pendiente",texto:"© QualityMetric Incorporated. Requiere licencia de uso. Los ítems no se incluyen hasta obtenerla."},
+    cita:"Kosinski M, Bayliss MS, Bjorner JB, et al. A six-item short-form survey for measuring headache impact: the HIT-6. Qual Life Res. 2003;12(8):963-74.",
+    puntuacion:"Suma de 6 ítems con pesos 6, 8, 10, 11 y 13. Rango 36-78. ≥60 impacto grave · 56-59 considerable · 50-55 moderado · ≤49 poco o ninguno.",
+    items:null},
+
+  pdq8:{id:"pdq8",nombre:"PDQ-8",nombreCompleto:"Parkinson's Disease Questionnaire, versión de 8 ítems",
+    queMide:"Calidad de vida relacionada con la salud en la enfermedad de Parkinson.",
+    ventana:"Últimas 4 semanas",nItems:8,patologias:["parkinson"],
+    licencia:{estado:"pendiente",texto:"© Isis Innovation Ltd / Universidad de Oxford. Requiere licencia. Los ítems no se incluyen hasta obtenerla."},
+    cita:"Jenkinson C, Fitzpatrick R, Peto V, et al. The PDQ-8: development and validation of a short-form Parkinson's disease questionnaire. Psychol Health. 1997;12(6):805-14.",
+    puntuacion:"Cada ítem de 0 a 4. Índice = (suma / 32) × 100. Mayor puntuación indica peor calidad de vida. No existen puntos de corte oficiales.",
+    items:null},
+
+  woq9:{id:"woq9",nombre:"WOQ-9",nombreCompleto:"Wearing-Off Questionnaire de 9 ítems",
+    queMide:"Síntomas compatibles con fluctuación tipo wearing-off en la enfermedad de Parkinson.",
+    ventana:"Situación actual",nItems:9,patologias:["parkinson"],
+    licencia:{estado:"atribucion",texto:"© Stacy M et al. Uso no comercial con atribución."},
+    cita:"Stacy M, Bowron A, Guttman M, et al. Identification of motor and nonmotor wearing-off in Parkinson's disease. Mov Disord. 2005;20(6):726-33.",
+    puntuacion:"Cada síntoma puntúa 1 solo si aparece y mejora con la siguiente dosis. ≥2 ítems sugiere fluctuación tipo wearing-off.",
+    items:opcItems([["w1","Temblor"],["w2","Lentitud de movimientos"],["w3","Rigidez"],
+      ["w4","Problemas de equilibrio"],["w5","Dificultad para caminar"],["w6","Dificultad para hablar"],
+      ["w7","Dificultad para escribir"],["w8","Cambios en el estado de ánimo"],
+      ["w9","Dificultad para pensar o concentrarse"]],OPC_WOQ),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"síntomas",nivel:t>=2?"Compatible con fluctuación tipo wearing-off":"No sugiere fluctuación tipo wearing-off",
+        interpretacion:"Cada síntoma puntúa solo si mejora con la siguiente dosis."};}},
+
+  pdds:{id:"pdds",nombre:"PDDS",nombreCompleto:"Patient Determined Disease Steps",
+    queMide:"Nivel de discapacidad percibida por la propia persona con esclerosis múltiple.",
+    ventana:"Situación actual",nItems:1,patologias:["esclerosis_multiple"],
+    licencia:{estado:"atribucion",texto:"© Hohol MJ et al. Uso no comercial con atribución."},
+    cita:"Hohol MJ, Orav EJ, Weiner HL. Disease steps in multiple sclerosis: a simple approach to evaluate disease progression. Neurology. 1995;45(2):251-5.",
+    puntuacion:"Escala única de 0 a 8. Mayor puntuación indica mayor discapacidad.",
+    items:[{id:"d1",texto:"Selecciona el nivel que mejor describe tu situación actual",tipo:"opciones",
+      opciones:["0 · Normal","1 · Síntomas leves, sin limitación de la actividad","2 · Limitación moderada en actividades habituales",
+        "3 · Problemas de marcha que afectan a la actividad diaria","4 · Necesito bastón o apoyo para caminar distancias",
+        "5 · Necesito apoyo bilateral de forma constante","6 · Necesito andador o ayuda de otra persona",
+        "7 · Uso silla de ruedas la mayor parte del tiempo","8 · Limitado a silla de ruedas o cama"]
+        .map((t,i)=>({texto:t,valor:i}))}],
+    calcular(r){const t=Number(r.d1)||0;
+      return {total:t,unidad:"nivel",nivel:"Nivel PDDS "+t,interpretacion:"Escala de un solo ítem. Se interpreta por comparación longitudinal."};}},
+
+  tetras_adl:{id:"tetras_adl",nombre:"TETRAS-ADL",nombreCompleto:"Tremor Research Group Essential Tremor Rating Assessment, subescala de actividades diarias",
+    queMide:"Impacto del temblor esencial en las actividades de la vida diaria.",
+    ventana:"Situación actual",nItems:9,patologias:["temblor_esencial"],
+    licencia:{estado:"atribucion",texto:"© Elble RJ et al. Uso no comercial con atribución. Solo se incluye la subescala de actividades diarias."},
+    cita:"Elble RJ, Comella C, Fahn S, et al. Reliability of a new scale for essential tremor. Mov Disord. 2012;27(12):1567-9.",
+    puntuacion:"9 ítems de 0 a 4. Rango 0-36. Mayor puntuación indica mayor impacto. La subescala de exploración es clínica y no se incluye.",
+    items:opcItems([["t1","Hablar"],["t2","Alimentarse con cuchara"],["t3","Beber de un vaso"],
+      ["t4","Higiene personal"],["t5","Vestirse"],["t6","Escribir"],["t7","Trabajar o realizar tareas del hogar"],
+      ["t8","Actividades de ocio"],["t9","Satisfacción general con la vida"]],OPC_TETRAS),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"puntos",nivel:"Impacto en actividades diarias: "+t+" / 36",interpretacion:"Se interpreta por comparación longitudinal."};}},
+
+  irls:{id:"irls",nombre:"IRLS",nombreCompleto:"International Restless Legs Scale",
+    queMide:"Gravedad del síndrome de piernas inquietas.",
+    ventana:"Última semana",nItems:10,patologias:["piernas_inquietas"],
+    licencia:{estado:"atribucion",texto:"© International Restless Legs Syndrome Study Group. Uso no comercial con atribución."},
+    cita:"Walters AS, LeBrocq C, Dhar A, et al. Validation of the International Restless Legs Syndrome Study Group rating scale. Sleep Med. 2003;4(2):121-32.",
+    puntuacion:"10 ítems de 0 a 4. Rango 0-40. 1-10 leve · 11-20 moderado · 21-30 grave · 31-40 muy grave.",
+    items:[["i1","¿Cómo de intensas son las molestias en piernas o brazos?",OPC_IRLS_INT],
+      ["i2","¿Cómo de intensa es la necesidad de moverte?",OPC_IRLS_INT],
+      ["i3","¿Cuánto se alivia al moverte?",OPC_IRLS_INT],
+      ["i4","¿Cuánto afecta a tu sueño?",OPC_IRLS_INT],
+      ["i5","¿Cuánto afecta a tu cansancio diurno?",OPC_IRLS_INT],
+      ["i6","¿Cuánto afecta a tus actividades diarias?",OPC_IRLS_INT],
+      ["i7","¿Con qué frecuencia aparecen los síntomas?",OPC_IRLS_FRE],
+      ["i8","¿Con qué frecuencia los síntomas afectan a tu ánimo?",OPC_IRLS_FRE],
+      ["i9","¿Cómo de graves son los síntomas en conjunto?",OPC_IRLS_GRA],
+      ["i10","¿Cómo de graves son los síntomas en brazos o manos?",OPC_IRLS_GRA]]
+      .map(([id,texto,opciones])=>({id,texto,tipo:"opciones",opciones})),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=10?"Leve":t<=20?"Moderado":t<=30?"Grave":"Muy grave";
+      return {total:t,unidad:"puntos",nivel,interpretacion:"Rango 0-40. Se interpreta por comparación longitudinal."};}},
+
+  nddie:{id:"nddie",nombre:"NDDI-E",nombreCompleto:"Neurological Disorders Depression Inventory for Epilepsy",
+    queMide:"Cribado de síntomas depresivos en personas con epilepsia.",
+    ventana:"Últimas 2 semanas",nItems:6,patologias:["epilepsia"],
+    licencia:{estado:"atribucion",texto:"© Gilliam FG et al. Uso no comercial con atribución."},
+    cita:"Gilliam FG, Barry JJ, Hermann BP, et al. Rapid detection of major depression in epilepsy: a multicentre study. Lancet Neurol. 2006;5(5):399-405.",
+    puntuacion:"6 ítems de 1 a 4. Rango 6-24. Puntuación >15 sugiere episodio depresivo mayor. Es un cribado, no un diagnóstico.",
+    items:opcItems([["n1","Todo me resulta un esfuerzo"],["n2","Me siento culpable"],
+      ["n3","Siento que no valgo para nada"],["n4","No disfruto de las cosas que antes me gustaban"],
+      ["n5","Me siento desanimado o sin esperanza"],["n6","Me siento irritable"]],OPC_NDDIE),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"puntos",nivel:t>15?"Cribado positivo para posible episodio depresivo mayor":"Cribado negativo",
+        interpretacion:"Rango 6-24. El punto de corte >15 procede del estudio de validación original."};}},
+
+  msis29:{id:"msis29",nombre:"MSIS-29",nombreCompleto:"Multiple Sclerosis Impact Scale, 29 ítems",
+    queMide:"Impacto físico y psicológico de la esclerosis múltiple desde la perspectiva del paciente.",
+    ventana:"Últimas 2 semanas",nItems:29,patologias:["esclerosis_multiple"],
+    licencia:{estado:"pendiente",texto:"© Hobart J, Thompson A. Uso no comercial con registro previo. Los ítems no se incluyen hasta completar el registro."},
+    cita:"Hobart J, Lamping D, Fitzpatrick R, et al. The Multiple Sclerosis Impact Scale (MSIS-29): a new patient-based outcome measure. Brain. 2001;124(Pt 5):1242-51.",
+    puntuacion:"20 ítems físicos y 9 psicológicos, de 1 a 5. Cada subescala se transforma a 0-100. Mayor puntuación indica mayor impacto. No existen puntos de corte oficiales.",
+    items:null},
+
+  rankin:{id:"rankin",nombre:"Rankin modificada",nombreCompleto:"Modified Rankin Scale",
+    queMide:"Grado de discapacidad global tras un ictus.",
+    ventana:"Situación actual",nItems:1,patologias:["ictus","ait"],
+    licencia:{estado:"atribucion",texto:"Escala de uso libre con atribución. La versión original es de administración clínica; la autoinformada tiene menor precisión."},
+    cita:"van Swieten JC, Koudstaal PJ, Visser MC, et al. Interobserver agreement for the assessment of handicap in stroke patients. Stroke. 1988;19(5):604-7.",
+    puntuacion:"Escala única de 0 a 6. Mayor puntuación indica mayor discapacidad. Se recomienda confirmar con el equipo clínico.",
+    items:[{id:"r1",texto:"Selecciona el nivel que mejor describe tu situación actual",tipo:"opciones",
+      opciones:["0 · Sin síntomas","1 · Sin discapacidad significativa pese a síntomas",
+        "2 · Discapacidad leve: no puede realizar todas las actividades previas",
+        "3 · Discapacidad moderada: necesita algo de ayuda, camina sin ayuda",
+        "4 · Discapacidad moderadamente grave: no camina sin ayuda",
+        "5 · Discapacidad grave: encamado, incontinente, requiere cuidados","6 · Fallecido"]
+        .map((t,i)=>({texto:t,valor:i}))}],
+    calcular(r){const t=Number(r.r1)||0;
+      return {total:t,unidad:"nivel",nivel:"Rankin modificada "+t,interpretacion:"La versión autoinformada debe confirmarse con el equipo clínico."};}},
+
+  barthel:{id:"barthel",nombre:"Índice de Barthel",nombreCompleto:"Barthel Index",
+    queMide:"Independencia en actividades básicas de la vida diaria.",
+    ventana:"Situación actual",nItems:10,patologias:["ictus","ait","esclerosis_multiple","parkinson","ela"],
+    licencia:{estado:"atribucion",texto:"Escala de uso libre con atribución."},
+    cita:"Mahoney FI, Barthel DW. Functional evaluation: the Barthel Index. Md State Med J. 1965;14:61-5.",
+    puntuacion:"Suma ponderada de 10 ítems. Rango 0-100. 0-20 dependencia total · 21-60 grave · 61-90 moderada · 91-99 leve · 100 independiente. Bandas orientativas.",
+    items:[["b1","Alimentación",[["0 · Dependiente",0],["5 · Necesita ayuda",5],["10 · Independiente",10]]],
+      ["b2","Baño",[["0 · Dependiente",0],["5 · Independiente",5]]],
+      ["b3","Aseo personal",[["0 · Dependiente",0],["5 · Independiente",5]]],
+      ["b4","Vestirse",[["0 · Dependiente",0],["5 · Necesita ayuda",5],["10 · Independiente",10]]],
+      ["b5","Control de la deposición",[["0 · Incontinente",0],["5 · Accidente ocasional",5],["10 · Continente",10]]],
+      ["b6","Control de la micción",[["0 · Incontinente",0],["5 · Accidente ocasional",5],["10 · Continente",10]]],
+      ["b7","Uso del retrete",[["0 · Dependiente",0],["5 · Necesita ayuda",5],["10 · Independiente",10]]],
+      ["b8","Traslado cama-sillón",[["0 · Incapaz",0],["5 · Gran ayuda",5],["10 · Ayuda mínima",10],["15 · Independiente",15]]],
+      ["b9","Deambulación",[["0 · Inmóvil",0],["5 · Independiente en silla de ruedas",5],["10 · Camina con ayuda",10],["15 · Independiente",15]]],
+      ["b10","Escaleras",[["0 · Incapaz",0],["5 · Necesita ayuda",5],["10 · Independiente",10]]]]
+      .map(([id,texto,ops])=>({id,texto,tipo:"opciones",opciones:ops.map(([t,v])=>({texto:t,valor:v}))})),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=20?"Dependencia total":t<=60?"Dependencia grave":t<=90?"Dependencia moderada":t<100?"Dependencia leve":"Independiente";
+      return {total:t,unidad:"puntos",nivel,interpretacion:"Bandas orientativas; no sustituyen la valoración funcional del equipo clínico."};}},
+
+  ad8:{id:"ad8",nombre:"AD8",nombreCompleto:"Ascertain Dementia 8",
+    queMide:"Cambios cognitivos percibidos, preferiblemente por un informante.",
+    ventana:"Últimos años",nItems:8,patologias:["alzheimer","demencia_frontotemporal","demencia_cuerpos_lewy","deterioro_cognitivo_leve"],
+    licencia:{estado:"atribucion",texto:"© Washington University in St. Louis. Uso no comercial con atribución."},
+    cita:"Galvin JE, Roe CM, Powlishta KK, et al. The AD8: a brief informant interview to detect dementia. Neurology. 2005;65(4):559-64.",
+    puntuacion:"8 ítems de respuesta sí/no. Dos o más respuestas afirmativas sugieren deterioro cognitivo. La versión para informante es más sensible que el autoinforme.",
+    items:opcItems([["a1","¿Problemas de juicio o decisiones acertadas?"],["a2","¿Menos interés en actividades y aficiones?"],
+      ["a3","¿Repite preguntas o historias?"],["a4","¿Dificultad con el manejo del dinero o las cuentas?"],
+      ["a5","¿Dificultad para recordar citas o compromisos?"],["a6","¿Dificultad con la medicación habitual?"],
+      ["a7","¿Dificultad con el transporte o para orientarse?"],["a8","¿Problemas con la memoria o el pensamiento?"]],OPC_SI_NO),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"respuestas afirmativas",
+        nivel:t>=2?"Cribado positivo: se recomienda valoración cognitiva profesional":"Cribado negativo",
+        interpretacion:"Es un cribado, no un diagnóstico. La versión para informante es más sensible."};}},
+
+  alsfrsr:{id:"alsfrsr",nombre:"ALSFRS-R",nombreCompleto:"Amyotrophic Lateral Sclerosis Functional Rating Scale, revisada",
+    queMide:"Función en actividades de la vida diaria y función respiratoria en la ELA.",
+    ventana:"Situación actual",nItems:12,patologias:["ela"],
+    licencia:{estado:"atribucion",texto:"Escala de uso libre con atribución."},
+    cita:"Cedarbaum JM, Stambler N, Malta E, et al. The ALSFRS-R: a revised ALS functional rating scale. J Neurol Sci. 1999;169(1-2):13-21.",
+    puntuacion:"12 ítems de 0 a 4. Rango 0-48. Mayor puntuación indica mejor función. La pendiente de cambio es más informativa que el valor aislado.",
+    items:[["f1","Lenguaje",["4 · Normal","3 · Alteración detectable","2 · Repite palabras","1 · Combinación de voz y gestos","0 · Pierde la capacidad de hablar"]],
+      ["f2","Salivación",["4 · Normal","3 · Ligero exceso","2 · Exceso moderado, mínimo babeo nocturno","1 · Exceso marcado con babeo","0 · Babeo constante"]],
+      ["f3","Deglución",["4 · Hábitos alimentarios normales","3 · Problemas ocasionales al atragantarse","2 · Cambio en la consistencia de los alimentos","1 · Necesita suplementos","0 · Alimentación por sonda"]],
+      ["f4","Escritura",["4 · Normal","3 · Lenta o desordenada","2 · No todas las palabras son legibles","1 · Puede sostener el lápiz pero no escribir","0 · No puede sostener el lápiz"]],
+      ["f5","Cortar alimentos y manejar utensilios",["4 · Normal","3 · Algo lento y torpe","2 · Puede cortar la mayoría, lento y torpe","1 · Alguien debe cortar la comida","0 · Necesita ser alimentado"]],
+      ["f6","Vestirse e higiene",["4 · Normal","3 · Con esfuerzo o eficiencia reducida","2 · Ayuda intermitente","1 · Necesita ayuda para casi todo","0 · Dependiente total"]],
+      ["f7","Girar en la cama y ajustar la ropa",["4 · Normal","3 · Algo lento y torpe","2 · Puede girar solo con dificultad","1 · Puede iniciarlo pero no solo","0 · Dependiente"]],
+      ["f8","Caminar",["4 · Normal","3 · Dificultad leve","2 · Camina con ayuda","1 · Movimientos no funcionales","0 · No puede caminar"]],
+      ["f9","Subir escaleras",["4 · Normal","3 · Lento o inseguro","2 · Necesita ayuda","1 · No puede subir","0 · No puede subir ni un escalón"]],
+      ["f10","Disnea",["4 · Ninguna","3 · Al caminar","2 · Al hablar","1 · En reposo","0 · Dificultad importante"]],
+      ["f11","Ortopnea",["4 · Ninguna","3 · Dificultad para dormir sin más de dos almohadas","2 · Necesita más de dos almohadas","1 · Solo duerme sentado","0 · No puede dormir"]],
+      ["f12","Insuficiencia respiratoria",["4 · Ninguna","3 · Uso intermitente de ventilación no invasiva","2 · Uso continuo nocturno","1 · Uso continuo día y noche","0 · Ventilación invasiva"]]]
+      .map(([id,texto,ops])=>({id,texto,tipo:"opciones",opciones:desc4(ops)})),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"puntos",nivel:"Función global: "+t+" / 48",interpretacion:"La pendiente de cambio mensual es más informativa que el valor aislado."};}},
+
+  mgadl:{id:"mgadl",nombre:"MG-ADL",nombreCompleto:"Myasthenia Gravis Activities of Daily Living",
+    queMide:"Impacto de la miastenia gravis en las actividades diarias.",
+    ventana:"Últimos 7 días",nItems:8,patologias:["miastenia"],
+    licencia:{estado:"atribucion",texto:"© Wolfe GI et al. Uso no comercial con atribución."},
+    cita:"Wolfe GI, Herbelin L, Nations SP, et al. Myasthenia gravis activities of daily living profile. Neurology. 1999;52(7):1487-9.",
+    puntuacion:"8 ítems de 0 a 3. Rango 0-24. Mayor puntuación indica mayor afectación.",
+    items:[["g1","Habla",["0 · Normal","1 · Intermitente","2 · Constante","3 · Ininteligible"]],
+      ["g2","Masticación",["0 · Normal","1 · Cansancio con alimentos duros","2 · Cansancio con alimentos blandos","3 · Sonda nasogástrica o gastrostomía"]],
+      ["g3","Deglución",["0 · Normal","1 · Atragantamiento ocasional","2 · Necesita cambiar la dieta","3 · Sonda nasogástrica o gastrostomía"]],
+      ["g4","Respiración",["0 · Normal","1 · Disnea con esfuerzo","2 · Disnea en reposo","3 · Ventilación mecánica"]],
+      ["g5","Cepillarse los dientes o peinarse",["0 · Normal","1 · Algo cansado","2 · Descansos frecuentes","3 · Incapaz de hacerlo"]],
+      ["g6","Levantarse de una silla",["0 · Normal","1 · Leve, a veces","2 · Moderado, siempre","3 · Grave, necesita ayuda"]],
+      ["g7","Visión doble",["0 · Normal","1 · Ocasional","2 · Constante pero no incapacitante","3 · Constante e incapacitante"]],
+      ["g8","Párpado caído",["0 · Normal","1 · Ocasional","2 · Constante pero no incapacitante","3 · Constante e incapacitante"]]]
+      .map(([id,texto,ops])=>({id,texto,tipo:"opciones",opciones:asc3(ops)})),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"puntos",nivel:"Afectación funcional: "+t+" / 24",interpretacion:"Se interpreta por comparación longitudinal."};}},
+
+  dn4:{id:"dn4",nombre:"DN4 (entrevista)",nombreCompleto:"Douleur Neuropathique en 4 Questions, subescala de entrevista",
+    queMide:"Probabilidad de que el dolor tenga componente neuropático.",
+    ventana:"Situación actual",nItems:7,patologias:["dolor_neuropatico","neuralgia_trigemino","neuropatia_periferica"],
+    licencia:{estado:"atribucion",texto:"© Bouhassira D et al. Uso no comercial con atribución. Solo se incluye la subescala de entrevista."},
+    cita:"Bouhassira D, Attal N, Alchaar H, et al. Comparison of pain syndromes associated with nervous or somatic lesions and development of a new neuropathic pain diagnostic questionnaire (DN4). Pain. 2005;114(1-2):29-36.",
+    puntuacion:"7 ítems de respuesta sí/no. Puntuación ≥3 sobre 7 sugiere componente neuropático. La DN4 completa añade una exploración física que debe realizar un profesional.",
+    items:opcItems([["q1","¿El dolor tiene sensación de quemazón?"],["q2","¿El dolor tiene sensación de frío doloroso?"],
+      ["q3","¿El dolor tiene sensación de descarga eléctrica?"],["q4","¿Notas hormigueo en la zona?"],
+      ["q5","¿Notas pinchazos como de agujas?"],["q6","¿Notas adormecimiento en la zona?"],
+      ["q7","¿Notas picor en la zona?"]],OPC_SI_NO),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      return {total:t,unidad:"sobre 7",nivel:t>=3?"Compatible con dolor de componente neuropático":"No sugiere componente neuropático",
+        interpretacion:"Solo incluye la subescala de entrevista. La exploración física debe realizarla un profesional."};}},
+
+  epworth:{id:"epworth",nombre:"Epworth",nombreCompleto:"Epworth Sleepiness Scale",
+    queMide:"Somnolencia diurna en ocho situaciones cotidianas.",
+    ventana:"Situación habitual reciente",nItems:8,patologias:["narcolepsia","apnea_sueno","piernas_inquietas","parkinson","esclerosis_multiple"],
+    licencia:{estado:"atribucion",texto:"© M.W. Johns 1990-1997. Uso no comercial con atribución."},
+    cita:"Johns MW. A new method for measuring daytime sleepiness: the Epworth Sleepiness Scale. Sleep. 1991;14(6):540-5.",
+    puntuacion:"8 ítems de 0 a 3. Rango 0-24. ≤10 normal · 11-14 somnolencia leve-moderada · 15-17 moderada-grave · ≥18 grave. Bandas orientativas.",
+    items:opcItems([["e1","Sentado y leyendo"],["e2","Viendo la televisión"],["e3","Sentado inactivo en un lugar público"],
+      ["e4","Como pasajero en un coche durante una hora seguida"],["e5","Tumbado para descansar por la tarde"],
+      ["e6","Sentado y hablando con alguien"],["e7","Sentado tranquilamente después de comer"],
+      ["e8","En un coche parado unos minutos en el tráfico"]],OPC_EPW),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=10?"Somnolencia normal":t<=14?"Somnolencia leve-moderada":t<=17?"Somnolencia moderada-grave":"Somnolencia grave";
+      return {total:t,unidad:"puntos",nivel,interpretacion:"Bandas orientativas. Una puntuación elevada con riesgo al conducir requiere consulta."};}},
+
+  phq9:{id:"phq9",nombre:"PHQ-9",nombreCompleto:"Patient Health Questionnaire-9",
+    queMide:"Gravedad de síntomas depresivos.",
+    ventana:"Últimas 2 semanas",nItems:9,
+    patologias:["migrana","parkinson","esclerosis_multiple","epilepsia","ictus","ela","dolor_neuropatico","tumor_cerebral","tce","otra"],
+    licencia:{estado:"libre",texto:"No requiere permiso para reproducir, traducir o distribuir."},
+    cita:"Kroenke K, Spitzer RL, Williams JB. The PHQ-9: validity of a brief depression severity measure. J Gen Intern Med. 2001;16(9):606-13.",
+    puntuacion:"9 ítems de 0 a 3. Rango 0-27. 5-9 leve · 10-14 moderado · 15-19 moderadamente grave · ≥20 grave. Es un cribado, no un diagnóstico.",
+    items:opcItems([["p1","Poco interés o placer en hacer las cosas"],["p2","Sentirse decaído, deprimido o sin esperanza"],
+      ["p3","Dificultad para dormir o dormir demasiado"],["p4","Sentirse cansado o con poca energía"],
+      ["p5","Poco apetito o comer en exceso"],["p6","Sentirse mal consigo mismo o sentirse un fracaso"],
+      ["p7","Dificultad para concentrarse"],["p8","Moverse o hablar más despacio, o estar inquieto"],
+      ["p9","Pensamientos de que estaría mejor muerto o de hacerse daño"]],OPC_FREC4),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=4?"Mínimo o nulo":t<=9?"Leve":t<=14?"Moderado":t<=19?"Moderadamente grave":"Grave";
+      const alerta = (Number(r.p9)||0)>0
+        ? "El ítem 9 ha sido respondido de forma distinta a «Nunca». Coméntalo con tu profesional de referencia o contacta con emergencias si el riesgo es inmediato." : "";
+      return {total:t,unidad:"puntos",nivel,interpretacion:"Es un cribado, no un diagnóstico.",alerta};}},
+
+  gad7:{id:"gad7",nombre:"GAD-7",nombreCompleto:"Generalized Anxiety Disorder-7",
+    queMide:"Gravedad de síntomas de ansiedad.",
+    ventana:"Últimas 2 semanas",nItems:7,
+    patologias:["migrana","parkinson","esclerosis_multiple","epilepsia","tce","vertigo","tourette","otra"],
+    licencia:{estado:"libre",texto:"No requiere permiso para reproducir, traducir o distribuir."},
+    cita:"Spitzer RL, Kroenke K, Williams JB, Löwe B. A brief measure for assessing generalized anxiety disorder: the GAD-7. Arch Intern Med. 2006;166(10):1092-7.",
+    puntuacion:"7 ítems de 0 a 3. Rango 0-21. 5-9 leve · 10-14 moderado · ≥15 grave. Es un cribado, no un diagnóstico.",
+    items:opcItems([["y1","Sentirse nervioso, ansioso o al límite"],["y2","No poder dejar de preocuparse"],
+      ["y3","Preocuparse demasiado por cosas diversas"],["y4","Dificultad para relajarse"],
+      ["y5","Estar tan inquieto que cuesta quedarse quieto"],["y6","Irritabilidad o mal humor"],
+      ["y7","Miedo a que ocurra algo terrible"]],OPC_FREC4),
+    calcular(r){const t=Object.keys(r).reduce((s,k)=>s+(Number(r[k])||0),0);
+      const nivel = t<=4?"Mínimo o nulo":t<=9?"Leve":t<=14?"Moderado":"Grave";
+      return {total:t,unidad:"puntos",nivel,interpretacion:"Es un cribado, no un diagnóstico."};}},
+
+  eq5d5l:{id:"eq5d5l",nombre:"EQ-5D-5L",nombreCompleto:"EuroQol 5 Dimensiones, 5 niveles",
+    queMide:"Estado de salud genérico en cinco dimensiones, con escala visual analógica.",
+    ventana:"Hoy",nItems:6,
+    patologias:["migrana","parkinson","esclerosis_multiple","epilepsia","ictus","ela","alzheimer","dolor_neuropatico","narcolepsia","otra"],
+    licencia:{estado:"pendiente",texto:"© EuroQol Research Foundation. Requiere registro y licencia de uso. Los ítems no se incluyen hasta obtenerla."},
+    cita:"Herdman M, Gudex C, Lloyd A, et al. Development and preliminary testing of the new five-level version of EQ-5D (EQ-5D-5L). Qual Life Res. 2011;20(10):1727-36.",
+    puntuacion:"Cinco dimensiones con cinco niveles cada una, más una escala visual analógica de 0 a 100. El índice de utilidad requiere el sistema de valores oficial del país.",
+    items:null}
+};
+
+const MEDICIONES = {
+  tension:{nombre:"Tensión arterial",unidad:"mmHg",etiqueta:"Sistólica, mmHg",minimo:1,maximo:400,doble:true,
+    ayuda:"Introduce sistólica y diastólica. Anota el dispositivo y las condiciones."},
+  glucosa:{nombre:"Glucemia",unidad:"mg/dL",etiqueta:"Glucemia, mg/dL",minimo:0,maximo:2000,
+    ayuda:"Indica si fue en ayunas, después de comer u otra circunstancia."},
+  colesterol:{nombre:"Colesterol total",unidad:"mg/dL",etiqueta:"Colesterol total, mg/dL",minimo:0,maximo:2000,
+    ayuda:"Introduce el valor del laboratorio y conserva su informe."},
+  ldl:{nombre:"Colesterol LDL",unidad:"mg/dL",etiqueta:"Colesterol LDL, mg/dL",minimo:0,maximo:2000,
+    ayuda:"Introduce el resultado del laboratorio. La aplicación no calcula el LDL."},
+  peso:{nombre:"Peso",unidad:"kg",etiqueta:"Peso, kg",minimo:1,maximo:400,
+    ayuda:"Relevante en ELA, Parkinson avanzado y tratamientos con corticoides."},
+  dolor:{nombre:"Dolor percibido",unidad:"0-10",etiqueta:"Dolor: 0 = sin dolor; 10 = máximo imaginable",
+    minimo:0,maximo:10,entero:true,ayuda:"Escala numérica personal. Un valor aislado no establece un umbral de tratamiento."},
+  fatiga:{nombre:"Fatiga percibida",unidad:"0-10",etiqueta:"Fatiga: 0 = ninguna; 10 = máxima percibida",
+    minimo:0,maximo:10,entero:true,ayuda:"Registro subjetivo; no es una escala clínica validada."},
+  equilibrio:{nombre:"Equilibrio: tiempo de prueba",unidad:"segundos",etiqueta:"Tiempo, segundos",
+    minimo:0,maximo:3600,protocolo:true,ayuda:"Describe la prueba y sus condiciones. Realízala solo si es segura y está indicada."},
+  movilidad:{nombre:"Movilidad: tiempo de prueba",unidad:"segundos",etiqueta:"Tiempo, segundos",
+    minimo:0,maximo:3600,protocolo:true,ayuda:"Anota prueba, distancia, ayudas y condiciones. No compares pruebas diferentes."},
+  fuerza:{nombre:"Fuerza de prensión",unidad:"kgf",etiqueta:"Fuerza, kgf",minimo:0,maximo:500,protocolo:true,
+    ayuda:"Anota dispositivo, mano, postura y protocolo."},
+  marcha:{nombre:"Velocidad de marcha (10 m)",unidad:"segundos",etiqueta:"Tiempo, segundos",
+    minimo:0,maximo:600,protocolo:true,ayuda:"Prueba de 10 metros con el calzado y las ayudas habituales. Anótalo en el contexto."}
+};
+
+const HOJA_RUTA = [
+  {fase:"Fase 1 · Rigor clínico",estado:"en curso",items:[
+    "Catálogo de patologías agrupado por familias clínicas.",
+    "Instrumentos validados con versión, cita y condiciones de uso.",
+    "Semáforo de licencias por instrumento.",
+    "Informe con gráficas de evolución por patología.",
+    "Migración de datos desde la versión anterior."]},
+  {fase:"Fase 2 · Validación con profesionales",estado:"pendiente",items:[
+    "Revisión del catálogo por neurólogos y otros especialistas.",
+    "Constitución de un consejo asesor clínico con nombres y filiaciones.",
+    "Obtención de las licencias de los instrumentos marcados como pendientes.",
+    "Verificación de las traducciones al español de cada instrumento.",
+    "Prueba de usabilidad con personas con afectación motora o visual."]},
+  {fase:"Fase 3 · Cumplimiento legal",estado:"pendiente",items:[
+    "Cifrado en reposo y bloqueo biométrico.",
+    "Evaluación de impacto relativa a la protección de datos (EIPD).",
+    "Base jurídica del artículo 9 del RGPD y política de privacidad.",
+    "Análisis de cualificación como producto sanitario según el MDR 2017/745.",
+    "Accesibilidad conforme a EN 301 549 y WCAG 2.2 AA.",
+    "Interoperabilidad mediante FHIR R4 y exportación clínica."]}
+];
+
+/* ==========================================================================
+   2. ALMACÉN
+   ========================================================================== */
+
+const CLAVE = "mi_neuroseguimiento_v2";
+const CLAVE_V1 = "mi_neuroseguimiento_prototipo_v1";
+const CLAVE_TEMA = "mi_neuroseguimiento_tema";
+const ESQUEMA = 2;
+const VERSION_APP = "2.1.0";
+
+const $ = (id) => document.getElementById(id);
+
+const memoria = {};
+const almacen = {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return memoria[k] ?? null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){ memoria[k] = v; } },
+  del(k){ try { localStorage.removeItem(k); } catch(e){ delete memoria[k]; } }
+};
+
+function esc(v){
+  return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function uid(){
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return "id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+}
+function iso(d){ const p=(n)=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
+function hoyISO(){ return iso(new Date()); }
+function fmtFecha(v){ if(!v) return "—"; const [a,m,d]=String(v).split("-"); return d?d+"/"+m+"/"+a:v; }
+function limpiar(v){ return String(v ?? "").trim(); }
+function nombrePatologia(id){ return PATOLOGIAS[id] ? PATOLOGIAS[id].nombre : id; }
+function etiquetaLicencia(inst){
+  const e = inst.licencia.estado;
+  if (e === "libre") return {texto:"Uso libre",clase:"etiqueta-libre"};
+  if (e === "atribucion") return {texto:"Uso con atribución",clase:"etiqueta-atribucion"};
+  return {texto:"Licencia pendiente",clase:"etiqueta-pendiente"};
+}
+
+function estructuraVacia(){
+  return {esquema:ESQUEMA,version:VERSION_APP,creado:new Date().toISOString(),
+    actualizado:new Date().toISOString(),patologiasActivas:["migrana"],
+    diario:[],mediciones:[],cuestionarios:[],bienestar:[],pautas:[],tomas:[]};
+}
+
+function migrarV1(v1){
+  const base = estructuraVacia();
+  const pat = PATOLOGIAS[v1.patologia] ? v1.patologia : "migrana";
+  base.patologiasActivas = [pat];
+  base.creado = v1.creado || base.creado;
+  const etiquetar = (l) => (Array.isArray(l)?l:[]).map((r)=>({...r,id:r.id||uid(),patologia:r.patologia||pat}));
+  base.diario = etiquetar(v1.diario);
+  base.mediciones = etiquetar(v1.mediciones);
+  base.bienestar = etiquetar(v1.bienestar);
+  base.pautas = etiquetar(v1.pautas);
+  base.tomas = etiquetar(v1.tomas);
+  return base;
+}
+
+function normalizar(d){
+  const base = estructuraVacia();
+  const activas = Array.isArray(d.patologiasActivas) ? d.patologiasActivas.filter((p)=>PATOLOGIAS[p]) : [];
+  base.patologiasActivas = activas.length ? activas : ["migrana"];
+  base.creado = d.creado || base.creado;
+  base.actualizado = d.actualizado || base.actualizado;
+  const lista = (c) => (Array.isArray(d[c])?d[c]:[]).map((r)=>({
+    ...r, id:r.id||uid(), patologia:PATOLOGIAS[r.patologia]?r.patologia:base.patologiasActivas[0]
+  }));
+  base.diario = lista("diario");
+  base.mediciones = lista("mediciones");
+  base.cuestionarios = lista("cuestionarios");
+  base.bienestar = lista("bienestar");
+  base.pautas = lista("pautas");
+  base.tomas = lista("tomas");
+  return base;
+}
+
+function cargar(){
+  try {
+    const v2 = almacen.get(CLAVE);
+    if (v2) return normalizar(JSON.parse(v2));
+    const v1 = almacen.get(CLAVE_V1);
+    if (v1) { const m = migrarV1(JSON.parse(v1)); almacen.set(CLAVE, JSON.stringify(m)); return m; }
+    return estructuraVacia();
+  } catch(e){ console.error("Error al cargar:",e); return estructuraVacia(); }
+}
+
+let datos = cargar();
+
+function guardar(){
+  try {
+    datos.actualizado = new Date().toISOString();
+    almacen.set(CLAVE, JSON.stringify(datos));
+    return true;
+  } catch(e){
+    console.error("Error al guardar:",e);
+    mostrarMensaje("No se pudo guardar. Comprueba el espacio del navegador.",true);
+    return false;
+  }
+}
+
+function mostrarMensaje(texto,error){
+  const el = $("mensaje");
+  el.textContent = texto;
+  el.classList.toggle("error",!!error);
+  if (texto) setTimeout(()=>{ if(el.textContent===texto) el.textContent=""; },6000);
+}
+
+function registrosDe(campo){
+  const activas = datos.patologiasActivas;
+  return datos[campo].filter((r)=>activas.includes(r.patologia));
+}
+function ordenarPorFecha(lista,asc){
+  asc = asc !== false;
+  return [...lista].sort((a,b)=>{
+    const fa=(a.fecha||"")+(a.hora||""), fb=(b.fecha||"")+(b.hora||"");
+    return asc ? fa.localeCompare(fb) : fb.localeCompare(fa);
+  });
+}
+
+/* ==========================================================================
+   3. TEMA CLARO / OSCURO
+   ========================================================================== */
+
+function aplicarTema(t){
+  document.documentElement.setAttribute("data-tema",t);
+  const icono = $("iconoTema"), boton = $("botonTema");
+  if (icono) icono.textContent = t === "oscuro" ? "☀️" : "🌙";
+  if (boton) boton.setAttribute("aria-label", t === "oscuro" ? "Activar modo claro" : "Activar modo oscuro");
+}
+
+function temaInicial(){
+  const guardado = almacen.get(CLAVE_TEMA);
+  if (guardado === "claro" || guardado === "oscuro") return guardado;
+  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "oscuro" : "claro";
+}
+
+/* ==========================================================================
+   4. GRÁFICAS Y TABLAS
+   ========================================================================== */
+
+function svgDispersion(puntos,opciones){
+  opciones = opciones || {};
+  const ancho=640, alto=230, ml=48, mr=20, mt=20, mb=42;
+  const w=ancho-ml-mr, h=alto-mt-mb;
+  const yMin = opciones.yMin != null ? opciones.yMin : 0;
+  const yMax = opciones.yMax != null ? opciones.yMax : 10;
+  const color = opciones.color || "var(--azul)";
+
+  if (!puntos.length) return '<p class="vacio">Todavía no hay datos suficientes para dibujar la gráfica.</p>';
+
+  const tiempos = puntos.map((p)=>p.x.getTime());
+  let tMin=Math.min.apply(null,tiempos), tMax=Math.max.apply(null,tiempos);
+  if (tMin===tMax){ tMin-=86400000; tMax+=86400000; }
+
+  const px=(t)=>ml+((t-tMin)/(tMax-tMin))*w;
+  const py=(v)=>mt+h-((Math.min(Math.max(v,yMin),yMax)-yMin)/(yMax-yMin))*h;
+
+  let rejilla="";
+  for (let i=0;i<=5;i++){
+    const v=yMin+((yMax-yMin)*i)/5, y=py(v);
+    rejilla += '<line x1="'+ml+'" y1="'+y.toFixed(1)+'" x2="'+(ml+w)+'" y2="'+y.toFixed(1)+
+      '" stroke="var(--grafica-rejilla)" stroke-width="1"/>';
+    rejilla += '<text x="'+(ml-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="var(--secundario)">'+
+      v.toFixed(0)+'</text>';
+  }
+  let marcas="";
+  for (let i=0;i<=4;i++){
+    const t=tMin+((tMax-tMin)*i)/4, d=new Date(t);
+    marcas += '<text x="'+px(t).toFixed(1)+'" y="'+(mt+h+18)+'" text-anchor="middle" font-size="11" fill="var(--secundario)">'+
+      String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+'</text>';
+  }
+  const circulos = puntos.map((p)=>'<circle cx="'+px(p.x.getTime()).toFixed(1)+'" cy="'+py(p.y).toFixed(1)+
+    '" r="4.5" fill="'+color+'" fill-opacity="0.9"><title>'+
+    esc(fmtFecha(iso(p.x))+" · "+p.y+(opciones.unidad?" "+opciones.unidad:""))+'</title></circle>').join("");
+
+  return '<svg viewBox="0 0 '+ancho+' '+alto+'" role="img" aria-label="'+esc(opciones.titulo||"Gráfica de evolución")+
+    '" xmlns="http://www.w3.org/2000/svg">'+rejilla+marcas+
+    '<line x1="'+ml+'" y1="'+(mt+h)+'" x2="'+(ml+w)+'" y2="'+(mt+h)+'" stroke="var(--grafica-eje)" stroke-width="1.5"/>'+
+    '<line x1="'+ml+'" y1="'+mt+'" x2="'+ml+'" y2="'+(mt+h)+'" stroke="var(--grafica-eje)" stroke-width="1.5"/>'+
+    circulos+'</svg>';
+}
+
+function tabla(cabeceras,filas,vacio){
+  if (!filas.length) return '<p class="vacio">'+esc(vacio||"Sin registros.")+'</p>';
+  return '<table><thead><tr>'+cabeceras.map((c)=>"<th>"+esc(c)+"</th>").join("")+'</tr></thead><tbody>'+
+    filas.map((f)=>"<tr>"+f.map((c)=>"<td>"+c+"</td>").join("")+"</tr>").join("")+'</tbody></table>';
+}
+
+/* ==========================================================================
+   5. NAVEGACIÓN
+   ========================================================================== */
+
+const VISTAS = {};
+
+function irA(vista){
+  document.querySelectorAll(".vista").forEach((s)=>s.classList.add("oculto"));
+  const destino = $("vista-"+vista);
+  if (destino) destino.classList.remove("oculto");
+  document.querySelectorAll("#navegacion button").forEach((b)=>{
+    const activo = b.dataset.vista===vista;
+    b.classList.toggle("activo",activo);
+    b.setAttribute("aria-current",activo?"page":"false");
+  });
+  if (VISTAS[vista]) VISTAS[vista]();
+  if (history.replaceState) history.replaceState(null,"","#"+vista);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ==========================================================================
+   6. VISTAS
+   ========================================================================== */
+
+VISTAS.inicio = function(){
+  const diario = registrosDe("diario");
+  const conIntensidad = ordenarPorFecha(diario.filter((r)=>r.intensidad!==""&&r.intensidad!=null));
+  const cuestionarios = registrosDe("cuestionarios");
+  const pautas = registrosDe("pautas");
+
+  const totalRegistros = diario.length + registrosDe("mediciones").length +
+    cuestionarios.length + registrosDe("bienestar").length;
+
+  if (!totalRegistros){
+    $("primerosPasos").innerHTML = '<article class="tarjeta destacada"><h3>Primeros pasos</h3>'+
+      '<p class="ayuda">Todavía no hay datos. Sigue este orden para ver la aplicación en funcionamiento.</p>'+
+      '<div class="pasos">'+
+      '<div class="paso"><b>Paso 1</b><span>Marca tus patologías en el panel superior.</span></div>'+
+      '<div class="paso"><b>Paso 2</b><span>Anota un síntoma en el Diario.</span></div>'+
+      '<div class="paso"><b>Paso 3</b><span>Completa un cuestionario validado.</span></div>'+
+      '<div class="paso"><b>Paso 4</b><span>Genera el informe para tu especialista.</span></div>'+
+      '</div><div class="acciones"><button type="button" class="secundario" id="demoInicio">Cargar datos de demostración</button></div></article>';
+    const b = $("demoInicio");
+    if (b) b.addEventListener("click",()=>{
+      if (confirm("Se sustituirán los datos actuales por datos ficticios de demostración. ¿Continuar?")) sembrarDemo();
+    });
+  } else {
+    $("primerosPasos").innerHTML = "";
+  }
+
+  const ultimos30 = conIntensidad.filter((r)=>(Date.now()-new Date(r.fecha).getTime())/86400000<=30);
+  const media = ultimos30.length ? (ultimos30.reduce((s,r)=>s+Number(r.intensidad),0)/ultimos30.length).toFixed(1) : "—";
+  const maximo = ultimos30.length ? Math.max.apply(null,ultimos30.map((r)=>Number(r.intensidad))) : "—";
+  const diasConRegistro = new Set(ultimos30.map((r)=>r.fecha)).size;
+
+  $("resumenInicio").innerHTML = [
+    ["Registros (30 días)",ultimos30.length],["Días con registro",diasConRegistro],
+    ["Intensidad media",media],["Intensidad máxima",maximo],
+    ["Cuestionarios",cuestionarios.length],["Pautas activas",pautas.length]
+  ].map(([t,v])=>'<div class="dato"><span>'+esc(t)+'</span><strong>'+esc(v)+'</strong></div>').join("");
+
+  const puntos = conIntensidad.map((r)=>({x:new Date(r.fecha+"T"+(r.hora||"12:00")),y:Number(r.intensidad)}));
+  $("graficaDiarioInicio").innerHTML = svgDispersion(puntos,{yMin:0,yMax:10,unidad:"/10",titulo:"Intensidad registrada en el diario"});
+  $("tablaGraficaDiario").innerHTML = tabla(["Fecha","Tipo","Intensidad","Patología"],
+    ordenarPorFecha(conIntensidad,false).slice(0,8).map((r)=>[esc(fmtFecha(r.fecha)),esc(r.tipo),esc(r.intensidad),esc(nombrePatologia(r.patologia))]),
+    "Sin registros con intensidad.");
+
+  const recientes = [].concat(
+    registrosDe("diario").map((r)=>({...r,_t:"Diario"})),
+    registrosDe("mediciones").map((r)=>({...r,_t:"Medición"})),
+    registrosDe("cuestionarios").map((r)=>({...r,_t:"Cuestionario"})),
+    registrosDe("bienestar").map((r)=>({...r,_t:"Bienestar"})));
+
+  $("ultimosRegistros").innerHTML = tabla(["Fecha","Tipo","Detalle","Patología"],
+    ordenarPorFecha(recientes,false).slice(0,10).map((r)=>{
+      let d="";
+      if (r._t==="Diario") d = r.tipo + (r.intensidad!=null&&r.intensidad!==""?" · "+r.intensidad+"/10":"");
+      else if (r._t==="Medición") d = (MEDICIONES[r.tipo]?MEDICIONES[r.tipo].nombre:r.tipo)+" · "+r.valor1+(r.valor2?"/"+r.valor2:"");
+      else if (r._t==="Cuestionario") d = (INSTRUMENTOS[r.instrumento]?INSTRUMENTOS[r.instrumento].nombre:r.instrumento)+" · "+r.total;
+      else d = "Bienestar "+r.valor+"/10";
+      return [esc(fmtFecha(r.fecha)),esc(r._t),esc(d),esc(nombrePatologia(r.patologia))];
+    }),"Sin registros todavía.");
+
+  const pendientes = Object.values(INSTRUMENTOS).filter((i)=>i.licencia.estado==="pendiente").length;
+  const disponibles = Object.values(INSTRUMENTOS).length - pendientes;
+  $("estadoValidacion").innerHTML =
+    "<p><strong>"+Object.keys(PATOLOGIAS).length+"</strong> patologías catalogadas · <strong>"+disponibles+
+    "</strong> instrumentos con ítems disponibles · <strong>"+pendientes+"</strong> con licencia pendiente.</p>"+
+    '<p class="ayuda">Catálogo v'+VERSION_CATALOGO+" · revisión "+FECHA_REVISION+
+    ". Consulta la sección <em>Método y validación</em> para ver las fuentes y la hoja de ruta.</p>";
+};
+
+VISTAS.patologia = function(){
+  const activas = datos.patologiasActivas;
+  $("listaPatologias").innerHTML = activas.map((id)=>{
+    const p = PATOLOGIAS[id];
+    if (!p) return "";
+    const grupo = GRUPOS[p.grupo];
+    const instrumentos = (p.instrumentos||[]).map((iid)=>INSTRUMENTOS[iid]).filter(Boolean).map((inst)=>{
+      const et = etiquetaLicencia(inst);
+      return "<li><strong>"+esc(inst.nombre)+"</strong> — "+esc(inst.queMide)+
+        ' <span class="etiqueta '+et.clase+'">'+esc(et.texto)+"</span></li>";
+    }).join("");
+    return '<article class="tarjeta">'+
+      "<h3>"+esc(grupo?grupo.icono+" "+grupo.nombre:"")+"</h3>"+
+      "<h4>"+esc(p.nombre)+"</h4><p>"+esc(p.descripcion)+"</p>"+
+      '<p class="ayuda">'+esc(p.orientacion)+"</p>"+
+      tabla(["Aspecto","Qué registrar"],p.filas.map((f)=>[esc(f[0]),esc(f[1])]))+
+      (instrumentos?"<h4>Instrumentos disponibles</h4><ul>"+instrumentos+"</ul>":"")+
+      (p.consultar&&p.consultar.length
+        ? '<div class="aviso"><strong>Cuándo consultar sin esperar</strong><ul>'+
+          p.consultar.map((c)=>"<li>"+esc(c)+"</li>").join("")+
+          '</ul><p class="ayuda">Información educativa de fuentes públicas. No sustituye la valoración profesional.</p></div>' : "")+
+      '<p><a class="boton secundario" href="'+esc(p.enlace)+'" target="_blank" rel="noopener noreferrer">Consultar información fiable</a></p>'+
+      "</article>";
+  }).join("") || '<p class="vacio">Selecciona al menos una patología en el panel superior.</p>';
+};
+
+VISTAS.diario = function(){
+  const activas = datos.patologiasActivas;
+  $("orientacionDiario").textContent = activas.map((id)=>PATOLOGIAS[id]?PATOLOGIAS[id].orientacion:"").filter(Boolean).join(" ");
+  const registros = ordenarPorFecha(registrosDe("diario"),false);
+  $("tablaDiario").innerHTML = tabla(["Fecha","Hora","Tipo","Intensidad","Descripción","Patología",""],
+    registros.map((r)=>[esc(fmtFecha(r.fecha)),esc(r.hora||"—"),esc(r.tipo),
+      r.intensidad!=null&&r.intensidad!==""?esc(r.intensidad)+"/10":"—",
+      esc(r.descripcion),esc(nombrePatologia(r.patologia)),
+      '<button type="button" class="peligro mini" data-borrar="diario" data-id="'+esc(r.id)+'">Eliminar</button>']),
+    "Sin registros en el diario.");
+  const puntos = ordenarPorFecha(registrosDe("diario").filter((r)=>r.intensidad!==""&&r.intensidad!=null))
+    .map((r)=>({x:new Date(r.fecha+"T"+(r.hora||"12:00")),y:Number(r.intensidad)}));
+  $("graficaDiario").innerHTML = svgDispersion(puntos,{yMin:0,yMax:10,unidad:"/10",titulo:"Evolución de la intensidad"});
+};
+
+VISTAS.mediciones = function(){
+  const sel = $("medicionTipo");
+  if (!sel.options.length){
+    sel.innerHTML = Object.keys(MEDICIONES).map((k)=>'<option value="'+k+'">'+esc(MEDICIONES[k].nombre)+"</option>").join("");
+  }
+  actualizarCamposMedicion();
+
+  const selG = $("graficaTipo");
+  const actual = selG.value || "tension";
+  selG.innerHTML = Object.keys(MEDICIONES).map((k)=>'<option value="'+k+'"'+(k===actual?" selected":"")+">"+esc(MEDICIONES[k].nombre)+"</option>").join("");
+
+  const tipo = selG.value, def = MEDICIONES[tipo];
+  const registros = ordenarPorFecha(registrosDe("mediciones").filter((r)=>r.tipo===tipo));
+  const puntos = registros.map((r)=>({x:new Date(r.fecha+"T"+(r.hora||"12:00")),y:Number(r.valor1)}));
+  const maxDato = puntos.length ? Math.max.apply(null,puntos.map((p)=>p.y)) : (def.maximo||10);
+  const maxY = Math.max(maxDato*1.15,(def.minimo||0)+1);
+
+  $("graficaMediciones").innerHTML = svgDispersion(puntos,{yMin:def.minimo||0,yMax:maxY,unidad:def.unidad,color:"var(--turquesa)",titulo:"Gráfica de "+def.nombre});
+
+  if (puntos.length){
+    const vals = puntos.map((p)=>p.y);
+    $("resumenMediciones").innerHTML = '<div class="resumen">'+
+      [["Registros",vals.length],["Media",(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)],
+       ["Mínimo",Math.min.apply(null,vals)],["Máximo",Math.max.apply(null,vals)]]
+        .map(([t,v])=>'<div class="dato"><span>'+esc(t)+'</span><strong>'+esc(v)+'</strong></div>').join("")+"</div>";
+  } else { $("resumenMediciones").innerHTML = ""; }
+
+  $("tablaMediciones").innerHTML = tabla(["Fecha","Hora","Medición","Valor","Contexto","Patología",""],
+    ordenarPorFecha(registrosDe("mediciones"),false).map((r)=>{
+      const d = MEDICIONES[r.tipo] || {nombre:r.tipo,unidad:""};
+      return [esc(fmtFecha(r.fecha)),esc(r.hora||"—"),esc(d.nombre),
+        esc(r.valor1)+(r.valor2?"/"+esc(r.valor2):"")+" "+esc(d.unidad),
+        esc(r.contexto||"—"),esc(nombrePatologia(r.patologia)),
+        '<button type="button" class="peligro mini" data-borrar="mediciones" data-id="'+esc(r.id)+'">Eliminar</button>'];
+    }),"Sin mediciones registradas.");
+};
+
+function actualizarCamposMedicion(){
+  const def = MEDICIONES[$("medicionTipo").value];
+  if (!def) return;
+  $("etiquetaValor1").textContent = def.etiqueta;
+  $("medicionValor1").min = def.minimo;
+  $("medicionValor1").max = def.maximo;
+  $("medicionValor1").step = def.entero ? "1" : "any";
+  $("segundoValor").classList.toggle("oculto",!def.doble);
+  $("ayudaMedicion").textContent = def.ayuda;
+}
+
+VISTAS.cuestionarios = function(){
+  const activas = datos.patologiasActivas;
+  const disponibles = Object.values(INSTRUMENTOS).filter((i)=>i.patologias.some((p)=>activas.includes(p)));
+
+  if (!disponibles.length){
+    $("listaCuestionarios").innerHTML = '<p class="vacio">No hay instrumentos asociados a las patologías seleccionadas.</p>';
+  } else {
+    $("listaCuestionarios").innerHTML = disponibles.map((inst)=>{
+      const et = etiquetaLicencia(inst);
+      const previos = datos.cuestionarios.filter((r)=>r.instrumento===inst.id).sort((a,b)=>(b.fecha||"").localeCompare(a.fecha||""));
+      const ultimo = previos[0];
+      const bloqueado = inst.licencia.estado==="pendiente" || !inst.items;
+      return '<article class="tarjeta instrumento">'+
+        '<div class="instrumento-cabecera"><h3>'+esc(inst.nombre)+'</h3>'+
+        '<span class="etiqueta '+et.clase+'">'+esc(et.texto)+"</span></div>"+
+        "<p><strong>"+esc(inst.nombreCompleto)+"</strong></p><p>"+esc(inst.queMide)+"</p>"+
+        '<p class="ayuda">Ventana: '+esc(inst.ventana)+" · "+inst.nItems+" ítems · "+esc(inst.cita)+"</p>"+
+        '<p class="ayuda">'+esc(inst.licencia.texto)+"</p>"+
+        (ultimo ? '<p class="resultado"><strong>Último resultado:</strong> '+esc(ultimo.total)+" "+esc(ultimo.unidad||"")+
+          " · "+esc(ultimo.nivel||"")+' <span class="ayuda">('+esc(fmtFecha(ultimo.fecha))+")</span></p>"
+          : '<p class="ayuda">Sin resultados registrados.</p>')+
+        (bloqueado
+          ? '<p class="aviso-inline">Los ítems no se incluyen porque su licencia no lo permite todavía. La ficha y la puntuación están documentadas para su incorporación tras obtener la licencia.</p>'
+          : '<button type="button" class="boton" data-instrumento="'+esc(inst.id)+'">Responder ahora</button>')+
+        "</article>";
+    }).join("");
+  }
+
+  const historial = ordenarPorFecha(registrosDe("cuestionarios"),false);
+  $("historialCuestionarios").innerHTML = tabla(["Fecha","Instrumento","Puntuación","Interpretación","Patología",""],
+    historial.map((r)=>{
+      const inst = INSTRUMENTOS[r.instrumento] || {nombre:r.instrumento};
+      return [esc(fmtFecha(r.fecha)),esc(inst.nombre),esc(r.total)+" "+esc(r.unidad||""),
+        esc(r.nivel||"—"),esc(nombrePatologia(r.patologia)),
+        '<button type="button" class="peligro mini" data-borrar="cuestionarios" data-id="'+esc(r.id)+'">Eliminar</button>'];
+    }),"Sin cuestionarios completados.");
+};
+
+function abrirCuestionario(id){
+  const inst = INSTRUMENTOS[id];
+  if (!inst || !inst.items) return;
+
+  const campos = inst.items.map((it)=>{
+    if (it.tipo==="numero"){
+      return '<label for="q_'+esc(it.id)+'">'+esc(it.texto)+"</label>"+
+        '<input id="q_'+esc(it.id)+'" name="'+esc(it.id)+'" type="number" min="'+it.min+'" max="'+it.max+'" step="1"'+
+        (it.informativo?"":" required")+">";
+    }
+    return "<fieldset><legend>"+esc(it.texto)+"</legend>"+
+      it.opciones.map((o)=>'<label class="opcion"><input type="radio" name="'+esc(it.id)+'" value="'+o.valor+'"'+
+        (it.informativo?"":" required")+"> "+esc(o.texto)+"</label>").join("")+"</fieldset>";
+  }).join("");
+
+  $("zonaCuestionario").innerHTML = '<article class="tarjeta destacada"><h3>'+esc(inst.nombre)+"</h3>"+
+    '<p class="ayuda">'+esc(inst.puntuacion)+"</p>"+
+    '<form id="formCuestionario" data-instrumento="'+esc(id)+'">'+
+    '<label for="cuestionarioFecha">Fecha</label>'+
+    '<input id="cuestionarioFecha" type="date" value="'+hoyISO()+'" required>'+campos+
+    '<div class="acciones"><button type="submit">Guardar resultado</button>'+
+    '<button type="button" class="secundario" id="cancelarCuestionario">Cancelar</button></div></form></article>';
+
+  $("zonaCuestionario").scrollIntoView({behavior:"smooth",block:"start"});
+  $("cancelarCuestionario").addEventListener("click",()=>{ $("zonaCuestionario").innerHTML=""; });
+
+  $("formCuestionario").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    const form = ev.target, respuestas = {};
+    inst.items.forEach((it)=>{
+      if (it.tipo==="numero"){
+        const v = form.elements[it.id].value;
+        respuestas[it.id] = v===""?null:Number(v);
+      } else {
+        const s = form.querySelector('input[name="'+it.id+'"]:checked');
+        respuestas[it.id] = s?Number(s.value):null;
+      }
+    });
+    const res = inst.calcular(respuestas);
+    datos.cuestionarios.push({
+      id:uid(), patologia:datos.patologiasActivas[0], instrumento:inst.id,
+      fecha:$("cuestionarioFecha").value, respuestas,
+      total:res.total, unidad:res.unidad, nivel:res.nivel,
+      interpretacion:res.interpretacion, alerta:res.alerta||"",
+      versionInstrumento:inst.cita, creado:new Date().toISOString()
+    });
+    guardar();
+    $("zonaCuestionario").innerHTML = "";
+    mostrarMensaje("Resultado guardado: "+inst.nombre+" · "+res.total+" "+(res.unidad||"")+" · "+res.nivel);
+    if (res.alerta) alert(res.alerta);
+    VISTAS.cuestionarios();
+  });
+}
+
+VISTAS.bienestar = function(){
+  const registros = ordenarPorFecha(registrosDe("bienestar"));
+  $("graficaBienestar").innerHTML = svgDispersion(
+    registros.map((r)=>({x:new Date(r.fecha+"T12:00"),y:Number(r.valor)})),
+    {yMin:0,yMax:10,unidad:"/10",color:"var(--turquesa)",titulo:"Bienestar percibido"});
+  const conSueno = registros.filter((r)=>r.sueno!==""&&r.sueno!=null);
+  $("graficaSueno").innerHTML = svgDispersion(
+    conSueno.map((r)=>({x:new Date(r.fecha+"T12:00"),y:Number(r.sueno)})),
+    {yMin:0,yMax:12,unidad:"h",color:"var(--naranja)",titulo:"Horas de sueño"});
+  $("tablaBienestar").innerHTML = tabla(["Fecha","Bienestar","Sueño","Nota","Patología",""],
+    ordenarPorFecha(registrosDe("bienestar"),false).map((r)=>[esc(fmtFecha(r.fecha)),esc(r.valor)+"/10",
+      r.sueno!=null&&r.sueno!==""?esc(r.sueno)+" h":"—",esc(r.nota||"—"),esc(nombrePatologia(r.patologia)),
+      '<button type="button" class="peligro mini" data-borrar="bienestar" data-id="'+esc(r.id)+'">Eliminar</button>']),
+    "Sin registros de bienestar.");
+};
+
+VISTAS.medicacion = function(){
+  const fecha = $("calendarioFecha").value || hoyISO();
+  $("calendarioFecha").value = fecha;
+  const pautas = registrosDe("pautas").filter((p)=>(!p.inicio||p.inicio<=fecha)&&(!p.fin||p.fin>=fecha))
+    .sort((a,b)=>(a.hora||"").localeCompare(b.hora||""));
+  $("calendarioTabla").innerHTML = tabla(["Hora","Medicamento","Dosis","Estado declarado",""],
+    pautas.map((p)=>{
+      const toma = datos.tomas.find((t)=>t.pautaId===p.id&&t.fecha===fecha);
+      const estado = toma?toma.estado:"Sin confirmar";
+      return [esc(p.hora),esc(p.nombre),esc(p.dosis),esc(estado),
+        '<select data-toma="'+esc(p.id)+'" data-fecha="'+esc(fecha)+'">'+
+        ["Sin confirmar","Tomada","Omitida","Tomada con retraso"].map((o)=>'<option'+(o===estado?" selected":"")+">"+o+"</option>").join("")+
+        "</select>"];
+    }),"No hay pautas para esta fecha.");
+  $("tablaPautas").innerHTML = tabla(["Medicamento","Dosis","Hora","Inicio","Fin","Patología",""],
+    ordenarPorFecha(registrosDe("pautas"),false).map((p)=>[esc(p.nombre),esc(p.dosis),esc(p.hora),
+      esc(fmtFecha(p.inicio)),p.fin?esc(fmtFecha(p.fin)):"—",esc(nombrePatologia(p.patologia)),
+      '<button type="button" class="peligro mini" data-borrar="pautas" data-id="'+esc(p.id)+'">Eliminar</button>']),
+    "Sin pautas guardadas.");
+};
+
+VISTAS.familia = function(){
+  $("recursoFamiliaPatologia").innerHTML = datos.patologiasActivas.map((id)=>{
+    const p = PATOLOGIAS[id];
+    if (!p) return "";
+    return "<p><strong>"+esc(p.nombre)+'</strong> · <a href="'+esc(p.enlace)+
+      '" target="_blank" rel="noopener noreferrer">Información para pacientes y familiares</a></p>';
+  }).join("");
+};
+
+function rangoInforme(){
+  const hasta = $("informeHasta").value || hoyISO();
+  const d = new Date(hasta); d.setDate(d.getDate()-90);
+  const desde = $("informeDesde").value || iso(d);
+  return {desde,hasta};
+}
+function enRango(r,desde,hasta){ return r.fecha>=desde && r.fecha<=hasta; }
+
+function bloqueGraficaInforme(desde,hasta){
+  const activas = datos.patologiasActivas;
+  const registros = ordenarPorFecha(registrosDe("diario").filter((r)=>enRango(r,desde,hasta)))
+    .filter((r)=>r.intensidad!==""&&r.intensidad!=null);
+
+  if (!registros.length) return "";
+
+  let html = '<section class="informe-bloque"><h2>2. Evolución de la intensidad</h2>';
+
+  if (activas.length > 1){
+    activas.forEach((pid)=>{
+      const del = registros.filter((r)=>r.patologia===pid);
+      if (!del.length) return;
+      html += "<p><strong>"+esc(nombrePatologia(pid))+"</strong></p>"+
+        '<div class="informe-grafica">'+svgDispersion(
+          del.map((r)=>({x:new Date(r.fecha+"T"+(r.hora||"12:00")),y:Number(r.intensidad)})),
+          {yMin:0,yMax:10,unidad:"/10",color:"#12395c",titulo:"Intensidad en "+nombrePatologia(pid)})+"</div>";
+    });
+  } else {
+    html += '<div class="informe-grafica">'+svgDispersion(
+      registros.map((r)=>({x:new Date(r.fecha+"T"+(r.hora||"12:00")),y:Number(r.intensidad)})),
+      {yMin:0,yMax:10,unidad:"/10",color:"#12395c",titulo:"Evolución de la intensidad"})+"</div>";
+  }
+
+  html += '<p class="informe-meta">Cada punto es un registro declarado. No se unen los puntos para no sugerir valores intermedios.</p></section>';
+  return html;
+}
+
+function construirInforme(desde,hasta){
+  const activas = datos.patologiasActivas;
+  const diario = ordenarPorFecha(registrosDe("diario").filter((r)=>enRango(r,desde,hasta)));
+  const mediciones = ordenarPorFecha(registrosDe("mediciones").filter((r)=>enRango(r,desde,hasta)));
+  const cuestionarios = ordenarPorFecha(registrosDe("cuestionarios").filter((r)=>enRango(r,desde,hasta)));
+  const bienestar = ordenarPorFecha(registrosDe("bienestar").filter((r)=>enRango(r,desde,hasta)));
+  const pautas = registrosDe("pautas");
+
+  const conIntensidad = diario.filter((r)=>r.intensidad!==""&&r.intensidad!=null);
+  const valores = conIntensidad.map((r)=>Number(r.intensidad));
+  const diasConRegistro = new Set(diario.map((r)=>r.fecha)).size;
+  const totalDias = Math.max(1,Math.round((new Date(hasta)-new Date(desde))/86400000)+1);
+  const eventos = diario.filter((r)=>r.tipo==="Episodio"||r.tipo==="Posible efecto adverso");
+  const preguntas = limpiar($("informePreguntas").value);
+
+  let html = '<header class="informe-cabecera"><h1>Informe de seguimiento neurológico</h1>'+
+    "<p>Período: <strong>"+esc(fmtFecha(desde))+" — "+esc(fmtFecha(hasta))+"</strong></p>"+
+    "<p>Patologías activas: <strong>"+esc(activas.map(nombrePatologia).join(", "))+"</strong></p>"+
+    '<p class="informe-meta">Generado el '+esc(fmtFecha(hoyISO()))+" · Mi Neuroseguimiento v"+VERSION_APP+
+    " · Catálogo v"+VERSION_CATALOGO+"</p></header>";
+
+  html += '<section class="informe-bloque"><h2>1. Resumen del período</h2><table class="informe-tabla">'+
+    "<tr><th>Días con registro</th><td>"+diasConRegistro+" de "+totalDias+"</td>"+
+    "<th>Registros totales</th><td>"+diario.length+"</td></tr>"+
+    "<tr><th>Intensidad media</th><td>"+(valores.length?(valores.reduce((a,b)=>a+b,0)/valores.length).toFixed(1):"—")+" / 10</td>"+
+    "<th>Intensidad máxima</th><td>"+(valores.length?Math.max.apply(null,valores):"—")+" / 10</td></tr>"+
+    "<tr><th>Episodios registrados</th><td>"+eventos.length+"</td>"+
+    "<th>Mediciones</th><td>"+mediciones.length+"</td></tr></table></section>";
+
+  html += bloqueGraficaInforme(desde,hasta);
+
+  html += '<section class="informe-bloque"><h2>3. Cuestionarios validados</h2>';
+  if (cuestionarios.length){
+    html += '<table class="informe-tabla"><tr><th>Fecha</th><th>Instrumento</th><th>Puntuación</th><th>Interpretación</th></tr>'+
+      cuestionarios.map((r)=>{
+        const inst = INSTRUMENTOS[r.instrumento] || {nombre:r.instrumento};
+        return "<tr><td>"+esc(fmtFecha(r.fecha))+"</td><td>"+esc(inst.nombre)+"</td><td>"+
+          esc(r.total)+" "+esc(r.unidad||"")+"</td><td>"+esc(r.nivel||"—")+"</td></tr>";
+      }).join("")+"</table>";
+  } else { html += '<p class="informe-vacio">No se completaron cuestionarios en este período.</p>'; }
+  html += "</section>";
+
+  html += '<section class="informe-bloque"><h2>4. Eventos relevantes</h2>';
+  if (eventos.length){
+    html += '<table class="informe-tabla"><tr><th>Fecha</th><th>Tipo</th><th>Intensidad</th><th>Descripción</th></tr>'+
+      eventos.slice(0,12).map((r)=>"<tr><td>"+esc(fmtFecha(r.fecha))+"</td><td>"+esc(r.tipo)+"</td><td>"+
+        (r.intensidad!=null&&r.intensidad!==""?esc(r.intensidad)+"/10":"—")+"</td><td>"+esc(r.descripcion)+"</td></tr>").join("")+"</table>";
+  } else { html += '<p class="informe-vacio">Sin episodios ni posibles efectos adversos registrados.</p>'; }
+  html += "</section>";
+
+  html += '<section class="informe-bloque"><h2>5. Tratamiento declarado</h2>';
+  if (pautas.length){
+    html += '<table class="informe-tabla"><tr><th>Medicamento</th><th>Dosis</th><th>Hora</th></tr>'+
+      pautas.map((p)=>"<tr><td>"+esc(p.nombre)+"</td><td>"+esc(p.dosis)+"</td><td>"+esc(p.hora)+"</td></tr>").join("")+"</table>";
+  } else { html += '<p class="informe-vacio">Sin pautas registradas.</p>'; }
+  html += "</section>";
+
+  if (bienestar.length){
+    const vals = bienestar.map((r)=>Number(r.valor));
+    html += '<section class="informe-bloque"><h2>6. Bienestar percibido</h2><p>Media del período: <strong>'+
+      (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)+" / 10</strong> sobre "+vals.length+" registros.</p></section>";
+  }
+
+  if (preguntas){
+    html += '<section class="informe-bloque"><h2>Preguntas para la consulta</h2><p class="informe-preguntas">'+
+      esc(preguntas).replaceAll("\n","<br>")+"</p></section>";
+  }
+
+  html += '<footer class="informe-pie">'+
+    "<p><strong>Datos declarados por la propia persona.</strong> No han sido verificados por un profesional ni proceden de un dispositivo médico. "+
+    "La aplicación no diagnostica, no recomienda tratamientos y no detecta emergencias.</p>"+
+    "<p>Los instrumentos citados conservan la autoría y las condiciones de uso de sus autores originales. "+
+    "Consulte la sección «Método y validación» para las referencias completas.</p></footer>";
+
+  return html;
+}
+
+VISTAS.informe = function(){
+  const r = rangoInforme();
+  if (!$("informeDesde").value) $("informeDesde").value = r.desde;
+  if (!$("informeHasta").value) $("informeHasta").value = r.hasta;
+  $("vistaPreviaInforme").innerHTML = construirInforme(r.desde,r.hasta);
+};
+
+VISTAS.metodo = function(){
+  $("versionCatalogo").textContent = VERSION_CATALOGO;
+  $("fechaRevision").textContent = FECHA_REVISION;
+
+  const todos = Object.values(INSTRUMENTOS);
+  const conItems = todos.filter((i)=>i.items);
+  const sinItems = todos.filter((i)=>!i.items);
+
+  $("tablaInstrumentos").innerHTML = tabla(["Instrumento","Qué mide","Ventana","Ítems","Licencia","Fuente"],
+    conItems.map((i)=>[
+      "<strong>"+esc(i.nombre)+'</strong><br><span class="ayuda">'+esc(i.nombreCompleto)+"</span>",
+      esc(i.queMide),esc(i.ventana),esc(i.nItems),
+      '<span class="etiqueta '+etiquetaLicencia(i).clase+'">'+esc(etiquetaLicencia(i).texto)+"</span>",
+      '<span class="ayuda">'+esc(i.cita)+"</span>"]));
+
+  $("tablaPendientes").innerHTML = tabla(["Instrumento","Qué mide","Ventana","Ítems","Estado","Fuente"],
+    sinItems.map((i)=>[
+      "<strong>"+esc(i.nombre)+'</strong><br><span class="ayuda">'+esc(i.nombreCompleto)+"</span>",
+      esc(i.queMide),esc(i.ventana),esc(i.nItems),
+      '<span class="etiqueta etiqueta-pendiente">Licencia pendiente</span><br><span class="ayuda">'+esc(i.licencia.texto)+"</span>",
+      '<span class="ayuda">'+esc(i.cita)+"</span>"]),
+    "No hay instrumentos pendientes de licencia.");
+
+  $("hojaRuta").innerHTML = HOJA_RUTA.map((f)=>'<article class="tarjeta"><h3>'+esc(f.fase)+
+    ' <span class="etiqueta '+(f.estado==="en curso"?"etiqueta-atribucion":"etiqueta-pendiente")+'">'+esc(f.estado)+
+    "</span></h3><ul>"+f.items.map((i)=>"<li>"+esc(i)+"</li>").join("")+"</ul></article>").join("");
+};
+
+VISTAS.datos = function(){
+  $("estadoConexion").textContent = navigator.onLine
+    ? "Conexión disponible. La aplicación funciona igualmente sin conexión."
+    : "Sin conexión. La aplicación sigue funcionando con los datos guardados.";
+  $("estadoPwa").textContent = ("serviceWorker" in navigator && location.protocol.startsWith("http"))
+    ? "Modo aplicación instalable disponible."
+    : "Instalación como aplicación no disponible en este contexto (requiere servidor web).";
+};
+
+function exportarJSON(){
+  const blob = new Blob([JSON.stringify(datos,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "neuroseguimiento-"+hoyISO()+".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  mostrarMensaje("Copia exportada. El archivo no está cifrado.");
+}
+
+function importarJSON(archivo){
+  const lector = new FileReader();
+  lector.onload = ()=>{
+    try {
+      const bruto = JSON.parse(lector.result);
+      if (!bruto || typeof bruto !== "object") throw new Error("Formato no reconocido");
+      const campos = ["diario","mediciones","cuestionarios","bienestar","pautas","tomas"];
+      const tieneAlguno = campos.some((c)=>Array.isArray(bruto[c]));
+      if (!tieneAlguno && !bruto.patologia) throw new Error("No contiene datos de seguimiento");
+      datos = (bruto.patologia && !bruto.patologiasActivas) ? migrarV1(bruto) : normalizar(bruto);
+      guardar();
+      pintarSelectorPatologias();
+      mostrarMensaje("Datos importados correctamente.");
+      irA("inicio");
+    } catch(e){
+      console.error(e);
+      mostrarMensaje("No se pudo importar: "+e.message,true);
+    }
+  };
+  lector.readAsText(archivo);
+}
+
+function sembrarDemo(){
+  const hoy = new Date();
+  const base = estructuraVacia();
+  base.patologiasActivas = ["migrana"];
+  const pat = "migrana";
+
+  for (let i=89;i>=0;i--){
+    const f = new Date(hoy); f.setDate(hoy.getDate()-i);
+    const fecha = iso(f);
+    if (Math.random()<0.24){
+      base.diario.push({id:uid(),patologia:pat,fecha,hora:"08:30",tipo:"Episodio",
+        intensidad:4+Math.floor(Math.random()*5),
+        descripcion:"Cefalea pulsátil hemicraneal derecha con náuseas y fotofobia. Mejoría parcial dos horas después del tratamiento agudo.",
+        creado:new Date().toISOString()});
+    }
+    if (Math.random()<0.35){
+      base.bienestar.push({id:uid(),patologia:pat,fecha,
+        valor:5+Math.floor(Math.random()*5), sueno:5.5+Math.round(Math.random()*5)/2,
+        nota:"Descanso irregular por despertares nocturnos.", creado:new Date().toISOString()});
+    }
+    if (i%15===0){
+      base.mediciones.push({id:uid(),patologia:pat,fecha,hora:"09:00",tipo:"tension",
+        valor1:112+Math.floor(Math.random()*18), valor2:70+Math.floor(Math.random()*12),
+        contexto:"Dispositivo automático de brazo, en reposo.", creado:new Date().toISOString()});
+    }
+  }
+
+  const inst = INSTRUMENTOS.midas;
+  const resp = {m1:3,m2:6,m3:2,m4:5,m5:4,mA:14,mB:7};
+  const res = inst.calcular(resp);
+  base.cuestionarios.push({id:uid(),patologia:pat,instrumento:"midas",
+    fecha:iso(new Date(hoy.getTime()-7*86400000)),respuestas:resp,
+    total:res.total,unidad:res.unidad,nivel:res.nivel,interpretacion:res.interpretacion,
+    alerta:"",versionInstrumento:inst.cita,creado:new Date().toISOString()});
+
+  const resp2 = {p1:1,p2:1,p3:2,p4:2,p5:0,p6:1,p7:1,p8:0,p9:0};
+  const res2 = INSTRUMENTOS.phq9.calcular(resp2);
+  base.cuestionarios.push({id:uid(),patologia:pat,instrumento:"phq9",
+    fecha:iso(new Date(hoy.getTime()-3*86400000)),respuestas:resp2,
+    total:res2.total,unidad:res2.unidad,nivel:res2.nivel,interpretacion:res2.interpretacion,
+    alerta:"",versionInstrumento:INSTRUMENTOS.phq9.cita,creado:new Date().toISOString()});
+
+  base.pautas.push({id:uid(),patologia:pat,nombre:"Tratamiento preventivo (ejemplo)",
+    dosis:"1 comprimido",hora:"22:00",inicio:iso(new Date(hoy.getTime()-60*86400000)),
+    fin:"",creado:new Date().toISOString()});
+
+  datos = base;
+  guardar();
+  pintarSelectorPatologias();
+  mostrarMensaje("Datos de demostración cargados. Son ficticios.");
+  irA("inicio");
+}
+
+/* ==========================================================================
+   7. SELECTOR DE PATOLOGÍAS
+   ========================================================================== */
+
+function pintarSelectorPatologias(filtro){
+  filtro = (filtro||"").toLowerCase().trim();
+  const activas = datos.patologiasActivas;
+  let encontradas = 0;
+
+  const html = Object.keys(GRUPOS).map((gid)=>{
+    const g = GRUPOS[gid];
+    const pats = Object.keys(PATOLOGIAS).filter((pid)=>{
+      const p = PATOLOGIAS[pid];
+      if (p.grupo !== gid) return false;
+      if (!filtro) return true;
+      return p.nombre.toLowerCase().includes(filtro) || g.nombre.toLowerCase().includes(filtro);
+    });
+    if (!pats.length) return "";
+    encontradas += pats.length;
+       return '<div class="grupo-patologias">'+
+      '<p class="grupo-titulo">'+esc(g.icono+" "+g.nombre)+"</p>"+
+      pats.map((pid)=>'<label class="opcion"><input type="checkbox" value="'+esc(pid)+'"'+
+        (activas.includes(pid)?" checked":"")+"> "+esc(PATOLOGIAS[pid].nombre)+"</label>").join("")+
+      "</div>";
+  }).join("");
+
+  $("selectorPatologias").innerHTML = html ||
+    '<p class="vacio">No hay patologías que coincidan con la búsqueda. Prueba con otro término.</p>';
+
+  $("resumenPatologias").textContent = activas.length
+    ? activas.length+" patología"+(activas.length>1?"s":"")+" activa"+(activas.length>1?"s":"")+
+      " · "+encontradas+" disponibles en el catálogo"
+    : "No hay ninguna patología activa. Marca al menos una.";
+
+  $("chipsPatologias").innerHTML = activas.map((id)=>
+    '<span class="chip">'+esc(nombrePatologia(id))+"</span>").join("");
+}
+
+/* ==========================================================================
+   8. ARRANQUE
+   ========================================================================== */
+
+function conectarEventos(){
+  document.querySelectorAll("#navegacion button").forEach((b)=>{
+    b.addEventListener("click",()=>irA(b.dataset.vista));
+  });
+
+  $("botonTema").addEventListener("click",()=>{
+    const actual = document.documentElement.getAttribute("data-tema");
+    const nuevo = actual === "oscuro" ? "claro" : "oscuro";
+    aplicarTema(nuevo);
+    almacen.set(CLAVE_TEMA,nuevo);
+  });
+
+  $("buscarPatologia").addEventListener("input",(ev)=>{
+    pintarSelectorPatologias(ev.target.value);
+  });
+
+  $("selectorPatologias").addEventListener("change",()=>{
+    const marcadas = Array.from($("selectorPatologias").querySelectorAll("input:checked")).map((i)=>i.value);
+    datos.patologiasActivas = marcadas.length ? marcadas : ["otra"];
+    guardar();
+    pintarSelectorPatologias($("buscarPatologia").value);
+    mostrarMensaje("Patologías activas actualizadas.");
+    const v = document.querySelector("#navegacion button.activo");
+    if (v && VISTAS[v.dataset.vista]) VISTAS[v.dataset.vista]();
+  });
+
+  $("formDiario").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    datos.diario.push({id:uid(),patologia:datos.patologiasActivas[0],
+      fecha:$("diarioFecha").value,hora:$("diarioHora").value,tipo:$("diarioTipo").value,
+      intensidad:$("diarioIntensidad").value===""?"":Number($("diarioIntensidad").value),
+      descripcion:limpiar($("diarioDescripcion").value),creado:new Date().toISOString()});
+    guardar();
+    ev.target.reset();
+    $("diarioFecha").value = hoyISO();
+    mostrarMensaje("Registro guardado en el diario.");
+    VISTAS.diario();
+  });
+
+  $("medicionTipo").addEventListener("change",actualizarCamposMedicion);
+  $("graficaTipo").addEventListener("change",VISTAS.mediciones);
+
+  $("formMedicion").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    const tipo = $("medicionTipo").value, def = MEDICIONES[tipo];
+    datos.mediciones.push({id:uid(),patologia:datos.patologiasActivas[0],
+      fecha:$("medicionFecha").value,hora:$("medicionHora").value,tipo,
+      valor1:Number($("medicionValor1").value),
+      valor2:(def.doble && $("medicionValor2").value!=="")?Number($("medicionValor2").value):"",
+      contexto:limpiar($("medicionContexto").value),creado:new Date().toISOString()});
+    guardar();
+    ev.target.reset();
+    $("medicionFecha").value = hoyISO();
+    actualizarCamposMedicion();
+    mostrarMensaje("Medición guardada.");
+    VISTAS.mediciones();
+  });
+
+  $("formBienestar").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    datos.bienestar.push({id:uid(),patologia:datos.patologiasActivas[0],
+      fecha:$("bienestarFecha").value,valor:Number($("bienestarValor").value),
+      sueno:$("bienestarSueno").value===""?"":Number($("bienestarSueno").value),
+      nota:limpiar($("bienestarNota").value),creado:new Date().toISOString()});
+    guardar();
+    ev.target.reset();
+    $("bienestarFecha").value = hoyISO();
+    mostrarMensaje("Registro de bienestar guardado.");
+    VISTAS.bienestar();
+  });
+
+  $("formPauta").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    datos.pautas.push({id:uid(),patologia:datos.patologiasActivas[0],
+      nombre:limpiar($("pautaNombre").value),dosis:limpiar($("pautaDosis").value),
+      hora:$("pautaHora").value,inicio:$("pautaInicio").value,fin:$("pautaFin").value,
+      creado:new Date().toISOString()});
+    guardar();
+    ev.target.reset();
+    mostrarMensaje("Pauta guardada. Recuerda que la aplicación no genera alarmas.");
+    VISTAS.medicacion();
+  });
+
+  $("calendarioFecha").addEventListener("change",VISTAS.medicacion);
+
+  document.addEventListener("change",(ev)=>{
+    const sel = ev.target.closest("[data-toma]");
+    if (!sel) return;
+    const pautaId = sel.dataset.toma, fecha = sel.dataset.fecha;
+    const existente = datos.tomas.find((t)=>t.pautaId===pautaId&&t.fecha===fecha);
+    if (existente) existente.estado = sel.value;
+    else datos.tomas.push({id:uid(),patologia:datos.patologiasActivas[0],pautaId,fecha,
+      estado:sel.value,creado:new Date().toISOString()});
+    guardar();
+    mostrarMensaje("Estado declarado guardado.");
+  });
+
+  document.addEventListener("click",(ev)=>{
+    const borrar = ev.target.closest("[data-borrar]");
+    if (borrar){
+      const campo = borrar.dataset.borrar, id = borrar.dataset.id;
+      if (!confirm("¿Eliminar este registro? Esta acción no se puede deshacer.")) return;
+      datos[campo] = datos[campo].filter((r)=>r.id!==id);
+      guardar();
+      mostrarMensaje("Registro eliminado.");
+      const v = document.querySelector("#navegacion button.activo");
+      if (v && VISTAS[v.dataset.vista]) VISTAS[v.dataset.vista]();
+      return;
+    }
+    const inst = ev.target.closest("[data-instrumento]");
+    if (inst) abrirCuestionario(inst.dataset.instrumento);
+  });
+
+  $("botonInforme").addEventListener("click",()=>{
+    const r = rangoInforme();
+    $("informeImpresion").innerHTML = construirInforme(r.desde,r.hasta);
+    window.print();
+  });
+  $("informeDesde").addEventListener("change",VISTAS.informe);
+  $("informeHasta").addEventListener("change",VISTAS.informe);
+
+  $("exportarJson").addEventListener("click",exportarJSON);
+  $("importarJson").addEventListener("click",()=>$("archivoImportar").click());
+  $("archivoImportar").addEventListener("change",(ev)=>{
+    if (ev.target.files[0]) importarJSON(ev.target.files[0]);
+    ev.target.value = "";
+  });
+  $("cargarDemo").addEventListener("click",()=>{
+    if (confirm("Se sustituirán los datos actuales por datos ficticios de demostración. ¿Continuar?")) sembrarDemo();
+  });
+  $("borrarTodo").addEventListener("click",()=>{
+    if (!confirm("Se borrarán todos los datos guardados en este navegador. ¿Continuar?")) return;
+    almacen.del(CLAVE); almacen.del(CLAVE_V1);
+    datos = estructuraVacia();
+    guardar();
+    pintarSelectorPatologias();
+    mostrarMensaje("Datos locales eliminados.");
+    irA("inicio");
+  });
+
+  $("obtenerUbicacion").addEventListener("click",()=>{
+    const estado = $("ubicacionEstado");
+    if (!navigator.geolocation){ estado.textContent = "Este navegador no permite obtener la ubicación."; return; }
+    estado.textContent = "Solicitando ubicación…";
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>{
+        const la = pos.coords.latitude, lo = pos.coords.longitude;
+        estado.textContent = "Ubicación aproximada: "+la.toFixed(4)+", "+lo.toFixed(4)+
+          " (precisión ±"+Math.round(pos.coords.accuracy)+" m). No se envía automáticamente a emergencias.";
+        $("ubicacionMapa").innerHTML = '<a class="boton secundario" target="_blank" rel="noopener noreferrer" href="https://www.openstreetmap.org/?mlat='+
+          la+"&mlon="+lo+"#map=16/"+la+"/"+lo+'">Abrir en el mapa</a>';
+      },
+      ()=>{ estado.textContent = "No se pudo obtener la ubicación. No retrases una llamada por intentarlo."; });
+  });
+
+  window.addEventListener("online",VISTAS.datos);
+  window.addEventListener("offline",VISTAS.datos);
+  window.addEventListener("hashchange",()=>{
+    const v = (location.hash||"").replace("#","");
+    if (VISTAS[v]) irA(v);
+  });
+}
+
+function iniciar(){
+  aplicarTema(temaInicial());
+
+  $("diarioFecha").value = hoyISO();
+  $("medicionFecha").value = hoyISO();
+  $("bienestarFecha").value = hoyISO();
+  $("pautaInicio").value = hoyISO();
+  $("calendarioFecha").value = hoyISO();
+  $("informeHasta").value = hoyISO();
+
+  pintarSelectorPatologias();
+  conectarEventos();
+
+  const inicial = (location.hash||"").replace("#","");
+  irA(VISTAS[inicial] ? inicial : "inicio");
+
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")){
+    navigator.serviceWorker.register("./sw.js").catch((e)=>console.warn("Sin service worker:",e));
+  }
+}
+
+document.addEventListener("DOMContentLoaded",iniciar);
+</script>
+</body>
+</html>

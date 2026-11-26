@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="512"
+     height="512"
+     viewBox="0 0 512 512">
+
+  <defs>
+    <linearGradient id="fondo"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1">
+      <stop offset="0%" stop-color="#143b60"/>
+      <stop offset="100%" stop-color="#087f8c"/>
+    </linearGradient>
+
+    <linearGradient id="cerebro"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#bdeaf0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0"
+        y="0"
+        width="512"
+        height="512"
+        rx="112"
+        fill="url(#fondo)"/>
+
+  <circle cx="256"
+          cy="256"
+          r="190"
+          fill="none"
+          stroke="#ffffff"
+          stroke-opacity="0.18"
+          stroke-width="3"/>
+
+  <path
+    d="
+      M256 112
+      C236 94 205 100 192 120
+      C165 116 143 134 141 160
+      C115 169 107 198 121 219
+      C105 241 113 270 136 279
+      C130 307 146 328 171 331
+      C180 355 202 364 224 353
+      C233 366 246 371 256 369
+
+      M256 112
+      C276 94 307 100 320 120
+      C347 116 369 134 371 160
+      C397 169 405 198 391 219
+      C407 241 399 270 376 279
+      C382 307 366 328 341 331
+      C332 355 310 364 288 353
+      C279 366 266 371 256 369
+      Z"
+    fill="url(#cerebro)"
+    fill-opacity="0.96"
+    stroke="#ffffff"
+    stroke-width="7"
+    stroke-linejoin="round"/>
+
+  <path
+    d="M256 114 L256 365"
+    fill="none"
+    stroke="#167d8f"
+    stroke-width="8"
+    stroke-linecap="round"/>
+
+  <path
+    d="
+      M192 122 C181 146 191 163 211 171
+      M143 161 C164 158 180 171 183 190
+      M122 220 C148 210 166 220 173 241
+      M137 279 C157 266 179 273 188 294
+      M171 331 C188 318 208 322 218 341
+      M212 171 C228 180 233 197 224 211
+      M173 241 C190 233 207 240 214 257
+
+      M320 122 C331 146 321 163 301 171
+      M369 161 C348 158 332 171 329 190
+      M390 220 C364 210 346 220 339 241
+      M375 279 C355 266 333 273 324 294
+      M341 331 C324 318 304 322 294 341
+      M300 171 C284 180 279 197 288 211
+      M339 241 C322 233 305 240 298 257
+    "
+    fill="none"
+    stroke="#167d8f"
+    stroke-width="7"
+    stroke-linecap="round"/>
+
+  <path
+    d="
+      M185 399 L220 399 L235 379
+      L252 421 L270 389 L281 399 L327 399
+    "
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <circle cx="185" cy="399" r="7" fill="#ffffff"/>
+  <circle cx="327" cy="399" r="7" fill="#ffffff"/>
+</svg>

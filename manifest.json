@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "Mi Neuroseguimiento",
+  "short_name": "Neuroseguimiento",
+  "description": "Diario personal de seguimiento neurológico con instrumentos validados, preparado para la consulta con el especialista.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f7fb",
+  "theme_color": "#143b60",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "shortcuts": [
+    { "name": "Diario", "short_name": "Diario", "url": "./#diario" },
+    { "name": "Cuestionarios", "short_name": "Cuestionarios", "url": "./#cuestionarios" },
+    { "name": "Informe", "short_name": "Informe", "url": "./#informe" }
+  ]
+}
